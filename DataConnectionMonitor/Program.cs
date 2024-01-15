@@ -77,8 +77,9 @@ while (true)
 /// </summary>
 static bool PingIPAddresses(List<string> IPAddresses)
 {
+  var count = 3;
   Random random = new();
-  while (IPAddresses.Count > 0)
+  while (count > 1)
   {
     // Select a random IP address
     string randomIPAddress = IPAddresses[random.Next(IPAddresses.Count)];
@@ -97,10 +98,11 @@ static bool PingIPAddresses(List<string> IPAddresses)
     {
       Console.WriteLine($"Failure: {randomIPAddress}");
       IPAddresses.Remove(randomIPAddress);
+      count--;
     }
 
     // Wait for 1 second before the next ping
-    Thread.Sleep(1000);
+    // Thread.Sleep(1000);
   }
 
   return false;
