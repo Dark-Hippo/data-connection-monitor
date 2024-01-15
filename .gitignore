@@ -1,0 +1,31 @@
+# Ignore build output directories
+bin/
+obj/
+
+# Ignore .NET Core files
+project.lock.json
+project.fragment.lock.json
+**/Properties/launchSettings.json
+
+# Ignore Visual Studio files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Ignore Rider files
+.idea/
+
+# Ignore all log files
+*.log
+
+# Ignore packages directory
+**/packages/*
+
+# Ignore the nuget lock file
+packages.lock.json
+
+# Ignore Performance analysis files created by Visual Studio
+*.diagsession
+*.sap
