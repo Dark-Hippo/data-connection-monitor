@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net.NetworkInformation;
 
 var IPAddresses = new List<string> {
@@ -21,40 +22,49 @@ var ping = new Ping();
 var random = new Random();
 var randomIPAddress = IPAddresses[random.Next(IPAddresses.Count)];
 var failure = false;
+var failureTime = DateTime.MinValue;
+var reconnectionTime = DateTime.MinValue;
 
 while (true)
 {
-
+  Log("Last ping attempt at " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), false);
   var reply = ping.Send(randomIPAddress);
   if (reply.Status == IPStatus.Success)
   {
-    Console.WriteLine($"Success: {randomIPAddress}");
     if (failure)
     {
       failure = false;
-      Console.WriteLine("connection restored at {0}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+      LogReconnectionTimeAndDowntime(failureTime);
+      failureTime = DateTime.MinValue;
+    }
+    else
+    {
+      Console.WriteLine($"Success: {randomIPAddress}");
     }
   }
   else
   {
-    Console.WriteLine($"Failure: {randomIPAddress}");
+    Console.WriteLine("Ping failure on {0}", randomIPAddress);
     var failureIPAddress = new List<string>();
     failureIPAddress.AddRange(IPAddresses);
     failureIPAddress.Remove(randomIPAddress);
     if (PingIPAddresses(failureIPAddress))
     {
-      Console.WriteLine("Internet connection is working again!");
       if (failure)
       {
         failure = false;
-        Console.WriteLine("connection restored at {0}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+        LogReconnectionTimeAndDowntime(failureTime);
+        failureTime = DateTime.MinValue;
       }
     }
     else
     {
-      Console.WriteLine("Internet connection is still down!");
-      Console.WriteLine("Internet failure at {0}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-      failure = true;
+      if (!failure)
+      {
+        failureTime = DateTime.Now;
+        failure = true;
+      }
+      Log("Internet failure at " + failureTime.ToString("yyyy-MM-dd HH:mm:ss"));
     }
 
   }
@@ -96,14 +106,40 @@ static bool PingIPAddresses(List<string> IPAddresses)
     // If the ping failed, print a failure message and remove the IP address from the list
     else
     {
-      Console.WriteLine($"Failure: {randomIPAddress}");
+      Console.WriteLine($"Additional failure on: {randomIPAddress}");
       IPAddresses.Remove(randomIPAddress);
       count--;
     }
-
-    // Wait for 1 second before the next ping
-    // Thread.Sleep(1000);
   }
 
   return false;
+}
+
+static void Log(string message, bool failure = true)
+{
+  
+var successFile = "output/success.txt";
+var failureFile = "output/failure.txt";
+
+  if(failure) {
+    if(!File.Exists(failureFile)) {
+      File.Create(failureFile).Close();
+    }
+    File.AppendAllTextAsync(failureFile, message);
+    Console.WriteLine(message);
+  } else {
+    // if success, write datetime to file
+    File.WriteAllTextAsync(successFile, message);
+    Console.WriteLine(message);
+  }
+}
+
+static void LogReconnectionTimeAndDowntime(DateTime failureTime)
+{
+  var reconnectionTime = DateTime.Now;
+  var message = "Connection restored at " + reconnectionTime.ToString("yyyy-MM-dd HH:mm:ss");
+  Console.WriteLine(message);
+  Log(message);
+  var downtime = reconnectionTime.Subtract(failureTime);
+  Log("Connection was down for a total of " + downtime.TotalSeconds + " seconds");
 }
