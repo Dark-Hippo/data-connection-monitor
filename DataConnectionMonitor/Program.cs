@@ -125,7 +125,7 @@ var failureFile = "output/failure.txt";
     if(!File.Exists(failureFile)) {
       File.Create(failureFile).Close();
     }
-    File.AppendAllTextAsync(failureFile, message);
+    File.AppendAllLinesAsync(failureFile, [message]);
     Console.WriteLine(message);
   } else {
     // if success, write datetime to file
