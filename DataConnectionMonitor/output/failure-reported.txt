@@ -1,0 +1,285 @@
+Internet failure at 2024-01-15 16:27:35
+Internet failure at 2024-01-15 16:27:35
+Connection restored at 2024-01-15 16:28:05
+Connection was down for a total of 30.0602856 seconds
+Internet failure at 2024-01-15 16:32:07
+Connection restored at 2024-01-15 16:32:12
+Connection was down for a total of 5.0418312 seconds
+Internet failure at 2024-01-15 16:33:26
+Internet failure at 2024-01-15 16:33:26
+Internet failure at 2024-01-15 16:33:26
+Internet failure at 2024-01-15 16:33:26
+Internet failure at 2024-01-15 16:33:26
+Internet failure at 2024-01-15 16:33:26
+Internet failure at 2024-01-15 16:33:26
+Internet failure at 2024-01-15 16:33:26
+Internet failure at 2024-01-15 16:33:26
+Internet failure at 2024-01-15 16:33:26
+Internet failure at 2024-01-15 16:33:26
+Internet failure at 2024-01-15 16:33:26
+Internet failure at 2024-01-15 16:33:26
+Internet failure at 2024-01-15 16:33:26
+Connection restored at 2024-01-15 16:38:01
+Connection was down for a total of 275.1248698 seconds
+Internet failure at 2024-01-15 16:45:12
+Internet failure at 2024-01-15 16:45:12
+Internet failure at 2024-01-15 16:45:12
+Internet failure at 2024-01-15 16:45:12
+Internet failure at 2024-01-15 16:45:12
+Internet failure at 2024-01-15 16:45:12
+Internet failure at 2024-01-15 16:45:12
+Internet failure at 2024-01-15 16:45:12
+Internet failure at 2024-01-15 16:45:12
+Internet failure at 2024-01-15 16:45:12
+Internet failure at 2024-01-15 16:45:12
+Internet failure at 2024-01-15 16:45:12
+Internet failure at 2024-01-15 16:45:12
+Internet failure at 2024-01-15 16:45:12
+Internet failure at 2024-01-15 16:45:12
+Connection restored at 2024-01-15 16:49:57
+Connection was down for a total of 285.5677106 seconds
+Internet failure at 2024-01-15 16:57:00
+Internet failure at 2024-01-15 16:57:00
+Internet failure at 2024-01-15 16:57:00
+Internet failure at 2024-01-15 16:57:00
+Internet failure at 2024-01-15 16:57:00
+Internet failure at 2024-01-15 16:57:00
+Internet failure at 2024-01-15 16:57:00
+Internet failure at 2024-01-15 16:57:00
+Internet failure at 2024-01-15 16:57:00
+Internet failure at 2024-01-15 16:57:00
+Internet failure at 2024-01-15 16:57:00
+Internet failure at 2024-01-15 16:57:00
+Internet failure at 2024-01-15 16:57:00
+Internet failure at 2024-01-15 16:57:00
+Internet failure at 2024-01-15 16:57:00
+Internet failure at 2024-01-15 16:57:00
+Connection was down for a total of 305.1404912 seconds
+Internet failure at 2024-01-15 18:26:09
+Connection was down for a total of 5.0445092 seconds
+Internet failure at 2024-01-15 19:32:44
+Internet failure at 2024-01-15 19:32:44
+Internet failure at 2024-01-15 19:32:44
+Internet failure at 2024-01-15 19:32:44
+Internet failure at 2024-01-15 19:32:44
+Internet failure at 2024-01-15 19:32:44
+Internet failure at 2024-01-15 19:32:44
+Internet failure at 2024-01-15 19:32:44
+Internet failure at 2024-01-15 19:32:44
+Internet failure at 2024-01-15 19:32:44
+Internet failure at 2024-01-15 19:32:44
+Internet failure at 2024-01-15 19:32:44
+Internet failure at 2024-01-15 19:32:44
+Internet failure at 2024-01-15 19:32:44
+Internet failure at 2024-01-15 19:32:44
+Internet failure at 2024-01-15 19:32:44
+Connection was down for a total of 305.1514403 seconds
+Internet failure at 2024-01-15 20:55:08
+Connection was down for a total of 5.1079661 seconds
+Internet failure at 2024-01-15 22:27:34
+Connection was down for a total of 5.0445518 seconds
+Internet failure at 2024-01-15 22:44:55
+Connection was down for a total of 5.058866 seconds
+Internet failure at 2024-01-15 23:47:32
+Connection was down for a total of 15.0512365 seconds
+Internet failure at 2024-01-16 00:26:48
+Connection was down for a total of 5.0355193 seconds
+Internet failure at 2024-01-16 03:54:52
+Connection restored at 2024-01-16 03:54:57
+Connection was down for a total of 5.0587374 seconds
+Internet failure at 2024-01-16 04:04:24
+Internet failure at 2024-01-16 04:04:24
+Internet failure at 2024-01-16 04:04:24
+Internet failure at 2024-01-16 04:04:24
+Internet failure at 2024-01-16 04:04:24
+Connection was down for a total of 95.0532756 seconds
+Internet failure at 2024-01-16 09:58:00
+Internet failure at 2024-01-16 09:58:00
+Internet failure at 2024-01-16 09:58:00
+Internet failure at 2024-01-16 09:58:00
+Internet failure at 2024-01-16 09:58:00
+Connection was down for a total of 88.3921327 seconds
+Internet failure at 2024-01-16 09:59:54
+Internet failure at 2024-01-16 09:59:54
+Connection was down for a total of 33.9576547 seconds
+Internet failure at 2024-01-16 10:47:01
+Connection restored at 2024-01-16 10:47:06
+Connection was down for a total of 5.0490029 seconds
+Internet failure at 2024-01-16 14:50:55
+Internet failure at 2024-01-16 14:50:55
+Internet failure at 2024-01-16 14:50:55
+Internet failure at 2024-01-16 14:50:55
+Internet failure at 2024-01-16 14:50:55
+Internet failure at 2024-01-16 14:50:55
+Internet failure at 2024-01-16 14:50:55
+Internet failure at 2024-01-16 14:50:55
+Internet failure at 2024-01-16 14:50:55
+Internet failure at 2024-01-16 14:50:55
+Internet failure at 2024-01-16 14:50:55
+Internet failure at 2024-01-16 14:50:55
+Internet failure at 2024-01-16 14:50:55
+Internet failure at 2024-01-16 14:50:55
+Internet failure at 2024-01-16 14:50:55
+Internet failure at 2024-01-16 14:50:55
+Connection restored at 2024-01-16 14:56:05
+Connection was down for a total of 310.1269247 seconds
+Internet failure at 2024-01-16 15:03:15
+Internet failure at 2024-01-16 15:03:15
+Internet failure at 2024-01-16 15:03:15
+Internet failure at 2024-01-16 15:03:15
+Internet failure at 2024-01-16 15:03:15
+Internet failure at 2024-01-16 15:03:15
+Internet failure at 2024-01-16 15:03:15
+Internet failure at 2024-01-16 15:03:15
+Internet failure at 2024-01-16 15:03:15
+Internet failure at 2024-01-16 15:03:15
+Internet failure at 2024-01-16 15:03:15
+Internet failure at 2024-01-16 15:03:15
+Connection restored at 2024-01-16 15:07:04
+Connection was down for a total of 229.1901864 seconds
+Internet failure at 2024-01-16 15:07:24
+Connection was down for a total of 9.2332767 seconds
+Internet failure at 2024-01-16 15:07:53
+Connection was down for a total of 11.02559 seconds
+Internet failure at 2024-01-16 17:22:34
+Internet failure at 2024-01-16 17:22:34
+Internet failure at 2024-01-16 17:22:34
+Internet failure at 2024-01-16 17:22:34
+Internet failure at 2024-01-16 17:22:34
+Internet failure at 2024-01-16 17:22:34
+Internet failure at 2024-01-16 17:22:34
+Internet failure at 2024-01-16 17:22:34
+Internet failure at 2024-01-16 17:22:34
+Internet failure at 2024-01-16 17:22:34
+Internet failure at 2024-01-16 17:22:34
+Internet failure at 2024-01-16 17:22:34
+Internet failure at 2024-01-16 17:22:34
+Internet failure at 2024-01-16 17:22:34
+Internet failure at 2024-01-16 17:22:34
+Internet failure at 2024-01-16 17:22:34
+Connection restored at 2024-01-16 17:27:45
+Connection was down for a total of 310.8997705 seconds
+Internet failure at 2024-01-16 22:09:33
+Internet failure at 2024-01-16 22:09:33
+Internet failure at 2024-01-16 22:09:33
+Internet failure at 2024-01-16 22:09:33
+Internet failure at 2024-01-16 22:09:33
+Connection restored at 2024-01-16 22:11:12
+Connection was down for a total of 99.3112058 seconds
+Internet failure at 2024-01-16 22:11:42
+Internet failure at 2024-01-16 22:11:42
+Internet failure at 2024-01-16 22:11:42
+Internet failure at 2024-01-16 22:11:42
+Internet failure at 2024-01-16 22:11:42
+Internet failure at 2024-01-16 22:11:42
+Connection restored at 2024-01-16 22:13:41
+Connection was down for a total of 119.5077441 seconds
+Internet failure at 2024-01-16 22:23:00
+Internet failure at 2024-01-16 22:23:00
+Internet failure at 2024-01-16 22:23:00
+Internet failure at 2024-01-16 22:23:00
+Internet failure at 2024-01-16 22:23:00
+Internet failure at 2024-01-16 22:23:00
+Internet failure at 2024-01-16 22:23:00
+Internet failure at 2024-01-16 22:23:00
+Internet failure at 2024-01-16 22:23:00
+Internet failure at 2024-01-16 22:23:00
+Connection was down for a total of 185.076908 seconds
+Internet failure at 2024-01-17 11:27:59
+Internet failure at 2024-01-17 11:27:59
+Internet failure at 2024-01-17 11:27:59
+Internet failure at 2024-01-17 11:27:59
+Internet failure at 2024-01-17 11:27:59
+Connection restored at 2024-01-17 11:29:25
+Connection was down for a total of 85.4743413 seconds
+Internet failure at 2024-01-17 11:29:51
+Internet failure at 2024-01-17 11:29:51
+Internet failure at 2024-01-17 11:29:51
+Internet failure at 2024-01-17 11:29:51
+Internet failure at 2024-01-17 11:29:51
+Internet failure at 2024-01-17 11:29:51
+Internet failure at 2024-01-17 11:29:51
+Internet failure at 2024-01-17 11:29:51
+Connection restored at 2024-01-17 11:32:27
+Connection was down for a total of 155.2882172 seconds
+Internet failure at 2024-01-17 13:09:15
+Internet failure at 2024-01-17 13:09:15
+Internet failure at 2024-01-17 13:09:15
+Internet failure at 2024-01-17 13:09:15
+Internet failure at 2024-01-17 13:09:15
+Internet failure at 2024-01-17 13:09:15
+Internet failure at 2024-01-17 13:09:15
+Internet failure at 2024-01-17 13:09:15
+Internet failure at 2024-01-17 13:09:15
+Internet failure at 2024-01-17 13:09:15
+Internet failure at 2024-01-17 13:09:15
+Internet failure at 2024-01-17 13:09:15
+Internet failure at 2024-01-17 13:09:15
+Internet failure at 2024-01-17 13:09:15
+Internet failure at 2024-01-17 13:09:15
+Internet failure at 2024-01-17 13:09:15
+Connection restored at 2024-01-17 13:14:20
+Connection was down for a total of 305.1041026 seconds
+Internet failure at 2024-01-17 13:21:10
+Internet failure at 2024-01-17 13:21:10
+Internet failure at 2024-01-17 13:21:10
+Connection was down for a total of 45.8843774 seconds
+Internet failure at 2024-01-17 13:22:16
+Connection was down for a total of 11.2563658 seconds
+Internet failure at 2024-01-17 13:22:54
+Connection restored at 2024-01-17 13:23:10
+Connection was down for a total of 16.1633165 seconds
+Internet failure at 2024-01-17 13:24:36
+Internet failure at 2024-01-17 13:24:36
+Internet failure at 2024-01-17 13:24:36
+Connection was down for a total of 45.092889 seconds
+Internet failure at 2024-01-17 13:25:41
+Connection restored at 2024-01-17 13:25:57
+Connection was down for a total of 16.2880258 seconds
+Internet failure at 2024-01-17 20:28:27
+Connection restored at 2024-01-17 20:28:34
+Connection was down for a total of 6.6032184 seconds
+Internet failure at 2024-01-17 20:29:48
+Connection restored at 2024-01-17 20:29:54
+Connection was down for a total of 6.0862336 seconds
+Internet failure at 2024-01-17 20:30:30
+Connection restored at 2024-01-17 20:30:47
+Connection was down for a total of 16.2360038 seconds
+Internet failure at 2024-01-17 20:39:28
+Connection restored at 2024-01-17 20:39:46
+Connection was down for a total of 17.6957045 seconds
+Internet failure at 2024-01-17 20:40:17
+Internet failure at 2024-01-17 20:40:17
+Connection was down for a total of 30.3282772 seconds
+Internet failure at 2024-01-17 20:41:58
+Connection restored at 2024-01-17 20:42:09
+Connection was down for a total of 11.0119219 seconds
+Internet failure at 2024-01-17 20:42:29
+Connection restored at 2024-01-17 20:42:34
+Connection was down for a total of 5.5110681 seconds
+Internet failure at 2024-01-17 20:43:00
+Connection restored at 2024-01-17 20:43:05
+Connection was down for a total of 5.1531354 seconds
+Internet failure at 2024-01-17 20:44:04
+Connection was down for a total of 5.032011 seconds
+Internet failure at 2024-01-18 05:25:17
+Connection restored at 2024-01-18 05:25:22
+Connection was down for a total of 5.0464116 seconds
+Internet failure at 2024-01-18 05:25:58
+Connection was down for a total of 10.0386929 seconds
+Internet failure at 2024-01-18 11:27:19
+Internet failure at 2024-01-18 11:27:19
+Internet failure at 2024-01-18 11:27:19
+Internet failure at 2024-01-18 11:27:19
+Internet failure at 2024-01-18 11:27:19
+Internet failure at 2024-01-18 11:27:19
+Internet failure at 2024-01-18 11:27:19
+Internet failure at 2024-01-18 11:27:19
+Internet failure at 2024-01-18 11:27:19
+Internet failure at 2024-01-18 11:27:19
+Connection restored at 2024-01-18 11:30:27
+Connection was down for a total of 187.8976886 seconds
+Internet failure at 2024-01-18 11:39:51
+Internet failure at 2024-01-18 11:39:51
+Connection restored at 2024-01-18 11:40:26
+Connection was down for a total of 35.631659 seconds
