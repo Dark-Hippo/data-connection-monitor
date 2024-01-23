@@ -29,3 +29,6 @@ packages.lock.json
 # Ignore Performance analysis files created by Visual Studio
 *.diagsession
 *.sap
+
+# Project specific files
+output/success.txt
