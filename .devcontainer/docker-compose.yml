@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  app:
+    image: mcr.microsoft.com/devcontainers/dotnet:1-8.0-bookworm
+    command: ["dotnet", "run"]
+    volumes:
+      - .:/app
+      - output:/app/output
+    working_dir: /app
+    ports:
+      - 5000:5000
+      - 5001:5001
+
+volumes:
+  output:
