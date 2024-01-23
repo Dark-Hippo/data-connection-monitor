@@ -117,17 +117,21 @@ static bool PingIPAddresses(List<string> IPAddresses)
 
 static void Log(string message, bool failure = true)
 {
-  
-var successFile = "output/success.txt";
-var failureFile = "output/failure.txt";
 
-  if(failure) {
-    if(!File.Exists(failureFile)) {
+  var successFile = "output/success.txt";
+  var failureFile = "output/failure.txt";
+
+  if (failure)
+  {
+    if (!File.Exists(failureFile))
+    {
       File.Create(failureFile).Close();
     }
     File.AppendAllLinesAsync(failureFile, [message]);
     Console.WriteLine(message);
-  } else {
+  }
+  else
+  {
     // if success, write datetime to file
     File.WriteAllTextAsync(successFile, message);
     Console.WriteLine(message);
