@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net.NetworkInformation;
+using Microsoft.Extensions.Logging;
 
 var IPAddresses = new List<string> {
   "8.8.8.8", // Google DNS
@@ -115,9 +116,8 @@ static bool PingIPAddresses(List<string> IPAddresses)
   return false;
 }
 
-static void Log(string message, bool failure = true)
+static void Log(ILogger logger, string message, bool failure = true)
 {
-
   var successFile = "output/success.txt";
   var failureFile = "output/failure.txt";
 
@@ -128,21 +128,21 @@ static void Log(string message, bool failure = true)
       File.Create(failureFile).Close();
     }
     File.AppendAllLinesAsync(failureFile, [message]);
-    Console.WriteLine(message);
+    logger.LogError(message);
   }
   else
   {
     // if success, write datetime to file
     File.WriteAllTextAsync(successFile, message);
-    Console.WriteLine(message);
+    logger.LogInformation(message)
   }
 }
 
-static void LogReconnectionTimeAndDowntime(DateTime failureTime)
+static void LogReconnectionTimeAndDowntime(ILogger logger, DateTime failureTime)
 {
   var reconnectionTime = DateTime.Now;
   var message = "Connection restored at " + reconnectionTime.ToString("yyyy-MM-dd HH:mm:ss");
-  Console.WriteLine(message);
+  logger.LogInformation(message);
   Log(message);
   var downtime = reconnectionTime.Subtract(failureTime);
   Log("Connection was down for a total of " + downtime.TotalSeconds + " seconds");
