@@ -22,39 +22,51 @@ var ping = new Ping();
 
 var random = new Random();
 var randomIPAddress = IPAddresses[random.Next(IPAddresses.Count)];
+
+using ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
+{
+  builder.AddSimpleConsole(options => {
+    options.IncludeScopes = true;
+    options.SingleLine = true;
+    options.TimestampFormat = "yyyy-MM-dd HH:mm:ss";
+  });
+});
+
+ILogger logger = loggerFactory.CreateLogger("DataConnectionMonitor");
+
 var failure = false;
 var failureTime = DateTime.MinValue;
 var reconnectionTime = DateTime.MinValue;
 
 while (true)
 {
-  Log("Last ping attempt at " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), false);
+
   var reply = ping.Send(randomIPAddress);
   if (reply.Status == IPStatus.Success)
   {
     if (failure)
     {
       failure = false;
-      LogReconnectionTimeAndDowntime(failureTime);
+      LogReconnectionTimeAndDowntime(logger, failureTime);
       failureTime = DateTime.MinValue;
     }
     else
     {
-      Console.WriteLine($"Success: {randomIPAddress}");
+      logger.LogInformation("Ping success on {IPAddress}", randomIPAddress);
     }
   }
   else
   {
-    Console.WriteLine("Ping failure on {0}", randomIPAddress);
+    logger.LogWarning("Ping failure on {IPAddress}", randomIPAddress);
     var failureIPAddress = new List<string>();
     failureIPAddress.AddRange(IPAddresses);
     failureIPAddress.Remove(randomIPAddress);
-    if (PingIPAddresses(failureIPAddress))
+    if (PingIPAddresses(logger, failureIPAddress))
     {
       if (failure)
       {
         failure = false;
-        LogReconnectionTimeAndDowntime(failureTime);
+        LogReconnectionTimeAndDowntime(logger, failureTime);
         failureTime = DateTime.MinValue;
       }
     }
@@ -65,7 +77,7 @@ while (true)
         failureTime = DateTime.Now;
         failure = true;
       }
-      Log("Internet failure at " + failureTime.ToString("yyyy-MM-dd HH:mm:ss"));
+      WriteToFile(logger, "Internet failure at " + failureTime.ToString("yyyy-MM-dd HH:mm:ss"));
     }
 
   }
@@ -86,7 +98,7 @@ while (true)
 /// If none of them respond, returns false
 /// If one of them responds, returns true
 /// </summary>
-static bool PingIPAddresses(List<string> IPAddresses)
+static bool PingIPAddresses(ILogger logger, List<string> IPAddresses)
 {
   var count = 3;
   Random random = new();
@@ -107,7 +119,7 @@ static bool PingIPAddresses(List<string> IPAddresses)
     // If the ping failed, print a failure message and remove the IP address from the list
     else
     {
-      Console.WriteLine($"Additional failure on: {randomIPAddress}");
+      logger.LogWarning("Additional failure on {IPAddress}", randomIPAddress);
       IPAddresses.Remove(randomIPAddress);
       count--;
     }
@@ -116,7 +128,7 @@ static bool PingIPAddresses(List<string> IPAddresses)
   return false;
 }
 
-static void Log(ILogger logger, string message, bool failure = true)
+static void WriteToFile(ILogger logger, string message, bool failure = true)
 {
   var successFile = "output/success.txt";
   var failureFile = "output/failure.txt";
@@ -134,16 +146,16 @@ static void Log(ILogger logger, string message, bool failure = true)
   {
     // if success, write datetime to file
     File.WriteAllTextAsync(successFile, message);
-    logger.LogInformation(message)
+    logger.LogInformation(message);
   }
 }
 
 static void LogReconnectionTimeAndDowntime(ILogger logger, DateTime failureTime)
 {
   var reconnectionTime = DateTime.Now;
-  var message = "Connection restored at " + reconnectionTime.ToString("yyyy-MM-dd HH:mm:ss");
+  var message = "Connection restored";
   logger.LogInformation(message);
-  Log(message);
+  WriteToFile(logger, message);
   var downtime = reconnectionTime.Subtract(failureTime);
-  Log("Connection was down for a total of " + downtime.TotalSeconds + " seconds");
+  WriteToFile(logger, "Connection was down for a total of " + downtime.TotalSeconds + " seconds");
 }
