@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Net.NetworkInformation;
+﻿using System.Net.NetworkInformation;
 using Microsoft.Extensions.Logging;
 
 var IPAddresses = new List<string> {
@@ -40,7 +38,6 @@ var reconnectionTime = DateTime.MinValue;
 
 while (true)
 {
-
   var reply = ping.Send(randomIPAddress);
   if (reply.Status == IPStatus.Success)
   {
@@ -61,7 +58,7 @@ while (true)
     var failureIPAddress = new List<string>();
     failureIPAddress.AddRange(IPAddresses);
     failureIPAddress.Remove(randomIPAddress);
-    if (PingIPAddresses(logger, failureIPAddress))
+    if (RetryConnection(logger, failureIPAddress))
     {
       if (failure)
       {
@@ -98,7 +95,7 @@ while (true)
 /// If none of them respond, returns false
 /// If one of them responds, returns true
 /// </summary>
-static bool PingIPAddresses(ILogger logger, List<string> IPAddresses)
+bool RetryConnection(ILogger logger, List<string> IPAddresses)
 {
   var count = 3;
   Random random = new();
@@ -128,7 +125,7 @@ static bool PingIPAddresses(ILogger logger, List<string> IPAddresses)
   return false;
 }
 
-static void WriteToFile(ILogger logger, string message, bool failure = true)
+void WriteToFile(ILogger logger, string message, bool failure = true)
 {
   var successFile = "output/success.txt";
   var failureFile = "output/failure.txt";
@@ -150,7 +147,7 @@ static void WriteToFile(ILogger logger, string message, bool failure = true)
   }
 }
 
-static void LogReconnectionTimeAndDowntime(ILogger logger, DateTime failureTime)
+void LogReconnectionTimeAndDowntime(ILogger logger, DateTime failureTime)
 {
   var reconnectionTime = DateTime.Now;
   var message = "Connection restored";
