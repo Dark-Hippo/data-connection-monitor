@@ -1,4 +1,5 @@
-﻿using System.Net.NetworkInformation;
+﻿using System.IO;
+using System.Net.NetworkInformation;
 using Microsoft.Extensions.Logging;
 
 var IPAddresses = new List<string> {
@@ -39,6 +40,7 @@ var reconnectionTime = DateTime.MinValue;
 while (true)
 {
   var reply = ping.Send(randomIPAddress);
+
   if (reply.Status == IPStatus.Success)
   {
     if (failure)
@@ -50,6 +52,7 @@ while (true)
     else
     {
       logger.LogInformation("Ping success on {IPAddress}", randomIPAddress);
+      WriteSuccessToFile();
     }
   }
   else
@@ -74,7 +77,7 @@ while (true)
         failureTime = DateTime.Now;
         failure = true;
       }
-      WriteToFile(logger, "Internet failure at " + failureTime.ToString("yyyy-MM-dd HH:mm:ss"));
+      logger.LogError("Internet failure occured");
     }
 
   }
@@ -125,34 +128,25 @@ bool RetryConnection(ILogger logger, List<string> IPAddresses)
   return false;
 }
 
-void WriteToFile(ILogger logger, string message, bool failure = true)
+void WriteFailureToFile(DateTime failureTime, int failureDuration)
 {
-  var successFile = "output/success.txt";
-  var failureFile = "output/failure.txt";
+  var failureFile = "output/connectionFailures.csv";
+    using var writer = new StreamWriter(failureFile, true);
+    writer.WriteLine($"{failureTime:yyyy-MM-dd HH:mm:ss},{failureDuration}");
+}
 
-  if (failure)
-  {
-    if (!File.Exists(failureFile))
-    {
-      File.Create(failureFile).Close();
-    }
-    File.AppendAllLinesAsync(failureFile, [message]);
-    logger.LogError(message);
-  }
-  else
-  {
-    // if success, write datetime to file
-    File.WriteAllTextAsync(successFile, message);
-    logger.LogInformation(message);
-  }
+void WriteSuccessToFile()
+{
+  var successFile = "output/lastSuccessfulConnection.txt";
+  using var writer = new StreamWriter(successFile, false);
+  writer.WriteLine($"Last successful ping at {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
 }
 
 void LogReconnectionTimeAndDowntime(ILogger logger, DateTime failureTime)
 {
   var reconnectionTime = DateTime.Now;
-  var message = "Connection restored";
-  logger.LogInformation(message);
-  WriteToFile(logger, message);
+  logger.LogInformation("Connection restored");
   var downtime = reconnectionTime.Subtract(failureTime);
-  WriteToFile(logger, "Connection was down for a total of " + downtime.TotalSeconds + " seconds");
+  logger.LogInformation("Connection was down for a total of {downtime} seconds", downtime.TotalSeconds);
+  WriteFailureToFile(failureTime, (int)downtime.TotalSeconds);
 }
