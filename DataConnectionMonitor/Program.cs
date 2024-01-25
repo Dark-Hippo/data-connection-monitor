@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Net.NetworkInformation;
+﻿using System.Net.NetworkInformation;
 using Microsoft.Extensions.Logging;
 
 var IPAddresses = new List<string> {
