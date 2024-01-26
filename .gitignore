@@ -31,4 +31,4 @@ packages.lock.json
 *.sap
 
 # Project specific files
-output/success.txt
+**/output/*
