@@ -4,7 +4,7 @@ using CsvHelper.Configuration.Attributes;
 using System.Globalization;
 
 
-const string disconnectionsPath = "connectionFailures.csv";
+var disconnectionsPath = Environment.GetEnvironmentVariable("FAILURES_DATA") ?? "data/connectionFailures.csv";
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+
+builder.WebHost.UseUrls($"http://*:{port}");
 
 var app = builder.Build();
 
