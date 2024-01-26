@@ -15,15 +15,21 @@ var IPAddresses = new List<string> {
   // "123.123.123.123", // Invalid IP address
 };
 
-// Path: DataConnectionMonitor/Program.cs
-var ping = new Ping();
+// maximum retries after the first ping failure
+const int maxRetries = 2;
 
+// interval between ping attempts
+const int pingInterval = 3000;
+
+
+var ping = new Ping();
 var random = new Random();
 var randomIPAddress = IPAddresses[random.Next(IPAddresses.Count)];
 
 using ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
 {
-  builder.AddSimpleConsole(options => {
+  builder.AddSimpleConsole(options =>
+  {
     options.IncludeScopes = true;
     options.SingleLine = true;
     options.TimestampFormat = "yyyy-MM-dd HH:mm:ss";
@@ -33,98 +39,81 @@ using ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
 ILogger logger = loggerFactory.CreateLogger("DataConnectionMonitor");
 
 var failureTime = DateTime.MinValue;
-ConnectionState connectionState = ConnectionState.Initialising;
+ConnectionState connectionState = ConnectionState.Connected;
+
+var retryCount = 0;
 
 while (true)
 {
-  var reply = ping.Send(randomIPAddress);
-
-  // if unsuccessful ping and current status is not disconnected
-  if(reply.Status != IPStatus.Success && connectionState != ConnectionState.Disconnected)
-  {
-    logger.LogWarning("Ping failure on {IPAddress}", randomIPAddress);
-
-    // log failure time
-    failureTime = DateTime.Now;
-
-    // set status as retrying
-    connectionState = ConnectionState.Retrying;
-
-    // retry with a different IP address
-    var retrySuccessful = RetryConnection(logger, IPAddresses);
-
-    // if retry successful, continue
-    if(retrySuccessful)
-    {
-      logger.LogInformation("Connection restored");
-      connectionState = ConnectionState.Connected;
-    }
-    // else set status as disconnected
-    else
-    {
-      logger.LogError("Internet failure occured");
-      connectionState = ConnectionState.Disconnected;
-    }
-  }
-
-  else
-  {
-    // if current status is failed
-    // log failure time and duration
-    // set status as connected
-  }
-
   // Select a new random IP address
   var previousIPAddress = randomIPAddress;
+  
   while (previousIPAddress == randomIPAddress)
   {
     randomIPAddress = IPAddresses[random.Next(IPAddresses.Count)];
   }
 
-  Console.WriteLine();
-  Thread.Sleep(5000);
-}
+  logger.LogInformation("Pinging {IPAddress}", randomIPAddress);
+  var reply = ping.Send(randomIPAddress);
 
-/// <summary>
-/// Pings a list of IP addresses until one of them responds
-/// If none of them respond, returns false
-/// If one of them responds, returns true
-/// </summary>
-bool RetryConnection(ILogger logger, List<string> IPAddresses)
-{
-  var count = 3;
-  Random random = new();
-  while (count > 1)
+  switch (connectionState)
   {
-    // Select a random IP address
-    string randomIPAddress = IPAddresses[random.Next(IPAddresses.Count)];
-
-    // Attempt to ping the IP address
-    Ping pingSender = new();
-    PingReply reply = pingSender.Send(randomIPAddress);
-
-    // If the ping was successful, print a success message
-    if (reply.Status == IPStatus.Success)
-    {
-      return true;
-    }
-    // If the ping failed, print a failure message and remove the IP address from the list
-    else
-    {
-      logger.LogWarning("Additional failure on {IPAddress}", randomIPAddress);
-      IPAddresses.Remove(randomIPAddress);
-      count--;
-    }
+    case ConnectionState.Connected:
+      if (reply.Status == IPStatus.Success)
+      {
+        logger.LogInformation("Successfully pinged {IPAddress}", randomIPAddress);
+        WriteSuccessToFile();
+      }
+      else
+      {
+        logger.LogWarning("Failed to ping {IPAddress}", randomIPAddress);
+        failureTime = DateTime.Now;
+        connectionState = ConnectionState.Retrying;
+      }
+      break;
+    case ConnectionState.Retrying:
+      if (reply.Status == IPStatus.Success)
+      {
+        connectionState = ConnectionState.Connected;
+        retryCount = 0;
+      }
+      else
+      {
+        logger.LogWarning("Failed to ping {IPAddress}", randomIPAddress);
+        retryCount++;
+        if (retryCount >= maxRetries)
+        {
+          connectionState = ConnectionState.Disconnected;
+          retryCount = 0;
+        }
+      }
+      break;
+    case ConnectionState.Disconnected:
+      if (reply.Status == IPStatus.Success)
+      {
+        logger.LogInformation("Connection restored");
+        var downtime = DateTime.Now.Subtract(failureTime);
+        logger.LogInformation("Connection was down for a total of {downtime} seconds", downtime.TotalSeconds);
+        WriteFailureToFile(failureTime, downtime.TotalSeconds);
+        connectionState = ConnectionState.Connected;
+      }
+      else
+      {
+        logger.LogWarning("Still unable to ping {IPAddress}", randomIPAddress);
+      }
+      break;
   }
 
-  return false;
+  logger.LogInformation("Current connection state: {connectionState}", connectionState);
+
+  Thread.Sleep(pingInterval);
 }
 
-void WriteFailureToFile(DateTime failureTime, int failureDuration)
+void WriteFailureToFile(DateTime failureTime, double failureDuration)
 {
   var failureFile = "output/connectionFailures.csv";
-    using var writer = new StreamWriter(failureFile, true);
-    writer.WriteLine($"{failureTime:yyyy-MM-dd HH:mm:ss},{failureDuration}");
+  using var writer = new StreamWriter(failureFile, true);
+  writer.WriteLine($"{failureTime:yyyy-MM-dd HH:mm:ss},{failureDuration}");
 }
 
 void WriteSuccessToFile()
@@ -132,13 +121,4 @@ void WriteSuccessToFile()
   var successFile = "output/lastSuccessfulConnection.txt";
   using var writer = new StreamWriter(successFile, false);
   writer.WriteLine($"Last successful ping at {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
-}
-
-void LogReconnectionTimeAndDowntime(ILogger logger, DateTime failureTime)
-{
-  var reconnectionTime = DateTime.Now;
-  logger.LogInformation("Connection restored");
-  var downtime = reconnectionTime.Subtract(failureTime);
-  logger.LogInformation("Connection was down for a total of {downtime} seconds", downtime.TotalSeconds);
-  WriteFailureToFile(failureTime, (int)downtime.TotalSeconds);
 }
