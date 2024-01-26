@@ -32,53 +32,46 @@ using ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
 
 ILogger logger = loggerFactory.CreateLogger("DataConnectionMonitor");
 
-var failure = false;
 var failureTime = DateTime.MinValue;
-var reconnectionTime = DateTime.MinValue;
+ConnectionState connectionState = ConnectionState.Initialising;
 
 while (true)
 {
   var reply = ping.Send(randomIPAddress);
 
-  if (reply.Status == IPStatus.Success)
-  {
-    if (failure)
-    {
-      failure = false;
-      LogReconnectionTimeAndDowntime(logger, failureTime);
-      failureTime = DateTime.MinValue;
-    }
-    else
-    {
-      logger.LogInformation("Ping success on {IPAddress}", randomIPAddress);
-      WriteSuccessToFile();
-    }
-  }
-  else
+  // if unsuccessful ping and current status is not disconnected
+  if(reply.Status != IPStatus.Success && connectionState != ConnectionState.Disconnected)
   {
     logger.LogWarning("Ping failure on {IPAddress}", randomIPAddress);
-    var failureIPAddress = new List<string>();
-    failureIPAddress.AddRange(IPAddresses);
-    failureIPAddress.Remove(randomIPAddress);
-    if (RetryConnection(logger, failureIPAddress))
+
+    // log failure time
+    failureTime = DateTime.Now;
+
+    // set status as retrying
+    connectionState = ConnectionState.Retrying;
+
+    // retry with a different IP address
+    var retrySuccessful = RetryConnection(logger, IPAddresses);
+
+    // if retry successful, continue
+    if(retrySuccessful)
     {
-      if (failure)
-      {
-        failure = false;
-        LogReconnectionTimeAndDowntime(logger, failureTime);
-        failureTime = DateTime.MinValue;
-      }
+      logger.LogInformation("Connection restored");
+      connectionState = ConnectionState.Connected;
     }
+    // else set status as disconnected
     else
     {
-      if (!failure)
-      {
-        failureTime = DateTime.Now;
-        failure = true;
-      }
       logger.LogError("Internet failure occured");
+      connectionState = ConnectionState.Disconnected;
     }
+  }
 
+  else
+  {
+    // if current status is failed
+    // log failure time and duration
+    // set status as connected
   }
 
   // Select a new random IP address
