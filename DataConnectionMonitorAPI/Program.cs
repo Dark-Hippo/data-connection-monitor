@@ -1,8 +1,6 @@
 using CsvHelper;
 using CsvHelper.Configuration;
-using CsvHelper.Configuration.Attributes;
 using System.Globalization;
-
 
 var disconnectionsPath = Environment.GetEnvironmentVariable("FAILURES_DATA") ?? "data/connectionFailures.csv";
 
@@ -28,7 +26,26 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/disconnections", () =>
+app.MapGet("/disconnections", (DateTime? fromDate, DateTime? toDate) =>
+{
+    var disconnections = GetDisconnections(fromDate, toDate);
+    return disconnections;
+})
+.WithName("GetDisconnections")
+.WithOpenApi();
+
+app.MapGet("/last-ping", () =>
+{
+    // read the lastSuccessfulConnection.txt file
+    var lastConnection = File.ReadAllText("data/lastSuccessfulConnection.txt");
+    return lastConnection;
+})
+.WithName("GetLastConnection")
+.WithOpenApi();
+
+app.Run();
+
+List<Disconnection> GetDisconnections(DateTime? fromDate, DateTime? toDate)
 {
     // read data from connectionFailures.csv
     using var reader = new StreamReader(disconnectionsPath);
@@ -39,25 +56,16 @@ app.MapGet("/disconnections", () =>
     };
     using var csv = new CsvReader(reader, config);
     var disconnections = csv.GetRecords<Disconnection>().ToList();
-    return disconnections;
-})
-.WithName("GetDisconnections")
-.WithOpenApi();
 
-app.Run();
-
-class Disconnection
-{
-    [Index(0)]
-    public DateTime Start { get; set; }
-    [Index(1)]
-    public double Duration { get; set; }
-
-    public string Downtime {
-        get
-        {
-            var downtime = TimeSpan.FromSeconds(Duration);
-            return downtime.ToString(@"hh\:mm\:ss");
-        }
+    // filter by date
+    if(fromDate.HasValue)
+    {
+        disconnections = disconnections.Where(d => d.Start >= fromDate).ToList();
     }
+    if(toDate.HasValue)
+    {
+        disconnections = disconnections.Where(d => d.Start <= toDate).ToList();
+    }
+
+    return disconnections;
 }
