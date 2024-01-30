@@ -1,6 +1,6 @@
 import {
-  disconnectionsData as disconnections,
-} from "./disconnectionsData";
+  useDisconnectionsData
+} from "./useDisconnectionsData";
 import { Disconnections } from "./components/Disconnections";
 import { Route, Routes } from "react-router-dom";
 
@@ -8,6 +8,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
 function App() {
+  const {data: disconnections, loading} = useDisconnectionsData();
+  
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   const disconnectionsByDate: { [date: string]: DisconnectionData[] } = {};
 
   disconnections.forEach((disconnection) => {
