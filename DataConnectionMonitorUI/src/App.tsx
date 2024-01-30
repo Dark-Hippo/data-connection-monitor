@@ -2,6 +2,7 @@ import {
   disconnectionsData as disconnections,
 } from "./disconnectionsData";
 import { Disconnections } from "./components/Disconnections";
+import { Route, Routes } from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -40,7 +41,10 @@ function App() {
           <h3>Longest disconnection: {longestDisconnection}</h3>
         </header>
         <main>
-          <Disconnections disconnections={disconnectionsByDate} />
+          <Routes>
+            <Route path="/" element={<Disconnections disconnections={disconnectionsByDate} />} />
+            <Route path="/:date" element={<Disconnections disconnections={disconnectionsByDate} />} />
+          </Routes>
         </main>
       </div>
     </>
