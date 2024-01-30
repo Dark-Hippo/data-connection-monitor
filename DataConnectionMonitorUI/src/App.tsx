@@ -1,40 +1,29 @@
-import {
-  useDisconnectionsData
-} from "./useDisconnectionsData";
+import { useDisconnectionsData } from "./useDisconnectionsData";
 import { Disconnections } from "./components/Disconnections";
 import { Route, Routes } from "react-router-dom";
+import { Spinner } from "react-bootstrap";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
 function App() {
-  const {data: disconnections, loading} = useDisconnectionsData();
-  
+  const {
+    loading,
+    totalDisconnections,
+    longestDisconnection,
+    disconnectionsByDate,
+  } = useDisconnectionsData();
+
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="d-flex justify-content-center align-items-center"
+      style={{ height: "100vh" }}>
+        <Spinner animation="border" role="status" variant="primary">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </div>
+    );
   }
-
-  const disconnectionsByDate: { [date: string]: DisconnectionData[] } = {};
-
-  disconnections.forEach((disconnection) => {
-    const date = disconnection.start.toISOString().split("T")[0];
-
-    if (!disconnectionsByDate[date]) {
-      disconnectionsByDate[date] = [];
-    }
-
-    disconnectionsByDate[date].push(disconnection);
-  });
-
-  // sort disconnections by start date
-  const disconnectionsData = disconnections.sort(
-    (a, b) => a.start.getTime() - b.start.getTime()
-  );
-
-  const totalDisconnections = disconnectionsData.length;
-  const longestDisconnection = [...disconnectionsData].sort(
-    (a, b) => b.duration - a.duration
-  )[0].downtime;
 
   return (
     <>
@@ -48,14 +37,19 @@ function App() {
         </header>
         <main>
           <Routes>
-            <Route path="/" element={<Disconnections disconnections={disconnectionsByDate} />} />
-            <Route path="/:date" element={<Disconnections disconnections={disconnectionsByDate} />} />
+            <Route
+              path="/"
+              element={<Disconnections disconnections={disconnectionsByDate} />}
+            />
+            <Route
+              path="/:date"
+              element={<Disconnections disconnections={disconnectionsByDate} />}
+            />
           </Routes>
         </main>
       </div>
     </>
   );
 }
-
 
 export default App;
