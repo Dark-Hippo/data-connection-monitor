@@ -1,0 +1,21 @@
+# TODO List
+
+## DataConnectionMonitor
+
+- [ ] Output folder location to environment variable / config file.
+- [ ] Other consts to config file.
+- [ ] DNS list to config file.
+- [ ] Add dockerfile with multi-stage build and proper build process.
+- [ ] Write connection status to file
+
+## DataConnectionMonitorAPI
+
+- [ ] Add dockerfile with multi-stage build and proper build process.
+- [x] Add endpoint for lastSuccessfulConnection endpoint.
+- [ ] Get UI address from environment variable for CORS
+- [ ] Read connection status from file, implement web socket to push status to UI.
+
+## DataConnectionMonitorUI
+
+- [ ] Add dockerfile with multi-stage build and proper build process (look at npm serve).
+- [ ] Add nginx to docker compose.
