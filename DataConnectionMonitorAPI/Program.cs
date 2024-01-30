@@ -5,6 +5,7 @@ using System.Globalization;
 var disconnectionsPath = Environment.GetEnvironmentVariable("FAILURES_DATA") ?? "data/connectionFailures.csv";
 
 var builder = WebApplication.CreateBuilder(args);
+var ui_port = Environment.GetEnvironmentVariable("UI_PORT") ?? "8080";
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -16,7 +17,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhostOrigins", builder =>
     {
-        builder.WithOrigins("http://localhost:5173")
+        builder.WithOrigins($"http://localhost:{ui_port}", "http://localhost")
             .AllowAnyMethod()
             .AllowAnyHeader();
     });
