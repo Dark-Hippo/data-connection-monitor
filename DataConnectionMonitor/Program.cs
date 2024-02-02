@@ -2,23 +2,9 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 
-var IPAddresses = new List<string> {
-  "8.8.8.8", // Google DNS
-  "8.8.4.4", // Google DNS
-  "1.1.1.1", // Cloudflare DNS
-  "1.0.0.1", // Cloudflare DNS
-  "9.9.9.9", // Quad9 DNS
-  "208.67.222.222", // OpenDNS
-  "208.67.220.220", // OpenDNS
-  "4.2.2.2", // Level3 DNS
-  "4.2.2.1", // Level3 DNS
-  "192.0.43.10", // ICANN DNS
-  // "123.123.123.123", // Invalid IP address
-};
-
 var builder = new ConfigurationBuilder()
   .SetBasePath(Directory.GetCurrentDirectory())
-  .AddJsonFile("appsettings.json")
+  .AddJsonFile("appsettings.json", reloadOnChange: true, optional: false)
   .AddEnvironmentVariables();
 
 var configuration = builder.Build();
@@ -55,6 +41,12 @@ if (string.IsNullOrEmpty(currentStatusFile))
   throw new InvalidOperationException("CurrentStatusFile is not set");
 }
 
+var IPAddresses = configuration.GetSection("IPAddresses").Get<List<IPAddress>>();
+if(IPAddresses == null || IPAddresses.Count == 0)
+{
+  throw new InvalidOperationException("IPAddresses is not set");
+}
+
 
 var ping = new Ping();
 var random = new Random();
@@ -88,21 +80,21 @@ while (true)
     randomIPAddress = IPAddresses[random.Next(IPAddresses.Count)];
   }
 
-  logger.LogInformation("Pinging {IPAddress}", randomIPAddress);
-  var reply = ping.Send(randomIPAddress);
+  logger.LogInformation("Pinging {IPAddress}", randomIPAddress.Address);
+  var reply = ping.Send(randomIPAddress.Address);
 
   switch (connectionState)
   {
     case ConnectionState.Connected:
       if (reply.Status == IPStatus.Success)
       {
-        logger.LogInformation("Successfully pinged {IPAddress}", randomIPAddress);
+        logger.LogInformation("Successfully pinged {IPAddress}", randomIPAddress.Address);
         WriteSuccessToFile();
         WriteCurrentStatusToFile(connectionState);
       }
       else
       {
-        logger.LogWarning("Failed to ping {IPAddress}", randomIPAddress);
+        logger.LogWarning("Failed to ping {IPAddress}", randomIPAddress.Address);
         failureTime = DateTime.Now;
         connectionState = ConnectionState.Retrying;
         WriteCurrentStatusToFile(connectionState);
@@ -117,7 +109,7 @@ while (true)
       }
       else
       {
-        logger.LogWarning("Failed to ping {IPAddress}", randomIPAddress);
+        logger.LogWarning("Failed to ping {IPAddress}", randomIPAddress.Address);
         retryCount++;
         if (retryCount >= maxRetries)
         {
@@ -139,7 +131,7 @@ while (true)
       }
       else
       {
-        logger.LogWarning("Still unable to ping {IPAddress}", randomIPAddress);
+        logger.LogWarning("Still unable to ping {IPAddress}", randomIPAddress.Address);
       }
       break;
   }
