@@ -2,11 +2,11 @@
 
 ## DataConnectionMonitor
 
-- [ ] Output folder location to environment variable / config file.
-- [ ] Other consts to config file.
+- [x] Output folder location to environment variable / config file.
+- [x] Other consts to config file.
 - [ ] DNS list to config file.
 - [ ] Add dockerfile with multi-stage build and proper build process.
-- [ ] Write connection status to file
+- [x] Write connection status to file
 
 ## DataConnectionMonitorAPI
 
