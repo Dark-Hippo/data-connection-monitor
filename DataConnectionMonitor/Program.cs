@@ -1,5 +1,6 @@
 ﻿using System.Net.NetworkInformation;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
 
 var IPAddresses = new List<string> {
   "8.8.8.8", // Google DNS
@@ -15,11 +16,44 @@ var IPAddresses = new List<string> {
   // "123.123.123.123", // Invalid IP address
 };
 
+var builder = new ConfigurationBuilder()
+  .SetBasePath(Directory.GetCurrentDirectory())
+  .AddJsonFile("appsettings.json")
+  .AddEnvironmentVariables();
+
+var configuration = builder.Build();
+
 // maximum retries after the first ping failure
-const int maxRetries = 2;
+bool success = int.TryParse(configuration["MaxRetries"], out int maxRetries);
+if (!success && maxRetries == 0)
+{
+  throw new InvalidOperationException("Failed to parse number and maxRetries is not set");
+}
 
 // interval between ping attempts
-const int pingInterval = 3000;
+success = int.TryParse(configuration["PingInterval"], out int pingInterval);
+if (!success && pingInterval == 0)
+{
+  throw new InvalidOperationException("Failed to parse number and pingInterval is not set");
+}
+
+var disconnectionsFile = configuration["DisconnectionsFile"];
+if (string.IsNullOrEmpty(disconnectionsFile))
+{
+  throw new InvalidOperationException("DisconnectionsFile is not set");
+}
+
+var lastSuccessfulConnectionsFile = configuration["LastSuccessfulConnectionFile"];
+if (string.IsNullOrEmpty(lastSuccessfulConnectionsFile))
+{
+  throw new InvalidOperationException("LastSuccessfulConnectionFile is not set");
+}
+
+var currentStatusFile = configuration["CurrentStatusFile"];
+if (string.IsNullOrEmpty(currentStatusFile))
+{
+  throw new InvalidOperationException("CurrentStatusFile is not set");
+}
 
 
 var ping = new Ping();
@@ -34,6 +68,7 @@ using ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
     options.SingleLine = true;
     options.TimestampFormat = "yyyy-MM-dd HH:mm:ss";
   });
+
 });
 
 ILogger logger = loggerFactory.CreateLogger("DataConnectionMonitor");
@@ -47,7 +82,7 @@ while (true)
 {
   // Select a new random IP address
   var previousIPAddress = randomIPAddress;
-  
+
   while (previousIPAddress == randomIPAddress)
   {
     randomIPAddress = IPAddresses[random.Next(IPAddresses.Count)];
@@ -63,18 +98,21 @@ while (true)
       {
         logger.LogInformation("Successfully pinged {IPAddress}", randomIPAddress);
         WriteSuccessToFile();
+        WriteCurrentStatusToFile(connectionState);
       }
       else
       {
         logger.LogWarning("Failed to ping {IPAddress}", randomIPAddress);
         failureTime = DateTime.Now;
         connectionState = ConnectionState.Retrying;
+        WriteCurrentStatusToFile(connectionState);
       }
       break;
     case ConnectionState.Retrying:
       if (reply.Status == IPStatus.Success)
       {
         connectionState = ConnectionState.Connected;
+        WriteCurrentStatusToFile(connectionState);
         retryCount = 0;
       }
       else
@@ -84,6 +122,7 @@ while (true)
         if (retryCount >= maxRetries)
         {
           connectionState = ConnectionState.Disconnected;
+        WriteCurrentStatusToFile(connectionState);
           retryCount = 0;
         }
       }
@@ -96,6 +135,7 @@ while (true)
         logger.LogInformation("Connection was down for a total of {downtime} seconds", downtime.TotalSeconds);
         WriteFailureToFile(failureTime, downtime.TotalSeconds);
         connectionState = ConnectionState.Connected;
+        WriteCurrentStatusToFile(connectionState);
       }
       else
       {
@@ -111,14 +151,21 @@ while (true)
 
 void WriteFailureToFile(DateTime failureTime, double failureDuration)
 {
-  var failureFile = "output/connectionFailures.csv";
+  var failureFile = disconnectionsFile;
   using var writer = new StreamWriter(failureFile, true);
   writer.WriteLine($"{failureTime:yyyy-MM-dd HH:mm:ss},{failureDuration}");
 }
 
 void WriteSuccessToFile()
 {
-  var successFile = "output/lastSuccessfulConnection.txt";
+  var successFile = lastSuccessfulConnectionsFile;
   using var writer = new StreamWriter(successFile, false);
   writer.WriteLine($"Last successful ping at {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
+}
+
+void WriteCurrentStatusToFile(ConnectionState connectionState)
+{
+  var statusFile = currentStatusFile;
+  using var writer = new StreamWriter(statusFile, false);
+  writer.WriteLine($"{connectionState}");
 }
