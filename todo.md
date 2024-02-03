@@ -5,7 +5,7 @@
 - [x] Output folder location to environment variable / config file.
 - [x] Other consts to config file.
 - [x] DNS list to config file.
-- [ ] Add dockerfile with multi-stage build and proper build process.
+- [x] Add dockerfile with multi-stage build and proper build process.
 - [x] Write connection status to file
 
 ## DataConnectionMonitorAPI
