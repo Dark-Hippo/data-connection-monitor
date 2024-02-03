@@ -1,0 +1,12 @@
+# Ignore everything
+**
+
+# Allow csproj and cs files
+!**/*.csproj
+!**/*.cs
+
+# Allow appsettings.json
+!**/appsettings.json
+
+# Allow Dockerfile
+!Dockerfile
