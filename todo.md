@@ -14,8 +14,13 @@
 - [x] Add endpoint for lastSuccessfulConnection endpoint.
 - [ ] Get UI address from environment variable for CORS
 - [ ] Read connection status from file, implement web socket to push status to UI.
+- [ ] Look at authentication for API.
 
 ## DataConnectionMonitorUI
 
 - [ ] Add dockerfile with multi-stage build and proper build process (look at npm serve).
 - [ ] Add nginx to docker compose.
+- [ ] Change page title
+- [ ] Add last successful connection endpoint to UI.
+- [ ] Add connection status indicator
+- [ ] Add authentication to communicate with API
