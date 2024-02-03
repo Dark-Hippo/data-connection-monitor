@@ -2,11 +2,10 @@ version: '3.8'
 
 services:
   monitor:
-    image: mcr.microsoft.com/devcontainers/dotnet:1-8.0-bookworm
-    command: ["/bin/bash", "-c", "apt update && apt install iputils-ping -y && dotnet run --project DataConnectionMonitor.csproj"]
+    build: ./DataConnectionMonitor
+    image: data-connection-monitor
     working_dir: /app
     volumes:
-      - ./DataConnectionMonitor:/app
       - ./output:/app/output
     restart: unless-stopped
   api:
