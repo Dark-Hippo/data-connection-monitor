@@ -1,6 +1,7 @@
 # Ignore build output directories
 bin/
 obj/
+out/
 
 # Ignore .NET Core files
 project.lock.json
