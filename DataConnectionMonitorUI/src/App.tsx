@@ -1,7 +1,8 @@
 import { useDisconnectionsData } from "./hooks/useDisconnectionsData";
 import { Disconnections } from "./components/Disconnections";
 import { Route, Routes } from "react-router-dom";
-import { Container, Spinner } from "react-bootstrap";
+import { Container, Spinner, FormCheck } from "react-bootstrap";
+import { useTheme } from "./contexts/ThemeContext";
 
 import "./App.css";
 
@@ -12,6 +13,8 @@ function App() {
     longestDisconnection,
     disconnectionsByDate,
   } = useDisconnectionsData();
+
+  const {theme, toggleTheme} = useTheme();
 
   if (loading) {
     return (
@@ -25,9 +28,12 @@ function App() {
   }
 
   return (
-    <Container fluid data-bs-theme="dark">
+    <Container fluid data-bs-theme={theme}>
       <header>
-        <h1>Disconnections</h1>
+        <h1>
+          <FormCheck style={{fontSize: "1rem"}} type="switch" id="theme-toggle" label="Dark mode" onChange={toggleTheme} checked={theme === 'dark'} />
+          Disconnections Monitor
+        </h1>
         <h3>
           Total disconnections since monitoring began: <span className="primary-emphasis">{totalDisconnections}</span>
         </h3>
