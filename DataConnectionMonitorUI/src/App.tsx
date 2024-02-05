@@ -1,9 +1,8 @@
-import { useDisconnectionsData } from "./useDisconnectionsData";
+import { useDisconnectionsData } from "./hooks/useDisconnectionsData";
 import { Disconnections } from "./components/Disconnections";
 import { Route, Routes } from "react-router-dom";
-import { Spinner } from "react-bootstrap";
+import { Container, Spinner } from "react-bootstrap";
 
-import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
 function App() {
@@ -17,7 +16,7 @@ function App() {
   if (loading) {
     return (
       <div className="d-flex justify-content-center align-items-center"
-      style={{ height: "100vh" }}>
+        style={{ height: "100vh" }}>
         <Spinner animation="border" role="status" variant="primary">
           <span className="visually-hidden">Loading...</span>
         </Spinner>
@@ -26,29 +25,28 @@ function App() {
   }
 
   return (
-    <>
-      <div className="container">
-        <header>
-          <h1>Disconnections</h1>
-          <h3>
-            Total disconnections since monitoring began: {totalDisconnections}
-          </h3>
-          <h3>Longest disconnection: {longestDisconnection}</h3>
-        </header>
-        <main>
-          <Routes>
-            <Route
-              path="/"
-              element={<Disconnections disconnections={disconnectionsByDate} />}
-            />
-            <Route
-              path="/:date"
-              element={<Disconnections disconnections={disconnectionsByDate} />}
-            />
-          </Routes>
-        </main>
-      </div>
-    </>
+    <Container fluid data-bs-theme="dark">
+      <header>
+        <h1>Disconnections</h1>
+        <h3>
+          Total disconnections since monitoring began: <span className="primary-emphasis">{totalDisconnections}</span>
+        </h3>
+        <h3>Longest disconnection: <span className="primary-emphasis">{longestDisconnection}</span></h3>
+      </header>
+      <main>
+        <Routes>
+          <Route
+            path="/"
+            element={<Disconnections disconnections={disconnectionsByDate} />}
+          />
+          <Route
+            path="/:date"
+            element={<Disconnections disconnections={disconnectionsByDate} />}
+          />
+        </Routes>
+      </main>
+    </Container>
+
   );
 }
 
