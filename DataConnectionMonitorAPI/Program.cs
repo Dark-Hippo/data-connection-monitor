@@ -2,10 +2,12 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using System.Globalization;
 
-var disconnectionsPath = Environment.GetEnvironmentVariable("FAILURES_DATA") ?? "data/connectionFailures.csv";
+var connectionFailuresFile = Environment.GetEnvironmentVariable("FAILURES_DATA") ?? "data/connectionFailures.csv";
+var lastSuccessfulConnectionFile = Environment.GetEnvironmentVariable("LAST_CONNECTION_DATA") ?? "data/lastSuccessfulConnection.txt";
+var currentConnectionFile = Environment.GetEnvironmentVariable("CURRENT_CONNECTION_DATA") ?? "data/currentStatus.txt";
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
 
 var builder = WebApplication.CreateBuilder(args);
-var ui_port = Environment.GetEnvironmentVariable("UI_PORT") ?? "8080";
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -15,15 +17,13 @@ builder.Services.AddSwaggerGen();
 // Add CORS services
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowLocalhostOrigins", builder =>
+    options.AddPolicy("AllowAllOrigins", builder =>
     {
-        builder.WithOrigins($"http://localhost:{ui_port}", "http://localhost")
+        builder.WithOrigins("*")
             .AllowAnyMethod()
             .AllowAnyHeader();
     });
 });
-
-var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
 
 builder.WebHost.UseUrls($"http://*:{port}");
 
@@ -39,7 +39,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 // Use CORS middleware
-app.UseCors("AllowLocalhostOrigins");
+app.UseCors("AllowAllOrigins");
 
 app.MapGet("/disconnections", (DateTime? fromDate, DateTime? toDate) =>
 {
@@ -52,7 +52,7 @@ app.MapGet("/disconnections", (DateTime? fromDate, DateTime? toDate) =>
 app.MapGet("/last-ping", () =>
 {
     // read the lastSuccessfulConnection.txt file
-    var lastConnection = File.ReadAllText("data/lastSuccessfulConnection.txt");
+    var lastConnection = File.ReadAllText(lastSuccessfulConnectionFile);
     return lastConnection;
 })
 .WithName("GetLastConnection")
@@ -63,7 +63,7 @@ app.Run();
 List<Disconnection> GetDisconnections(DateTime? fromDate, DateTime? toDate)
 {
     // read data from connectionFailures.csv
-    using var reader = new StreamReader(disconnectionsPath);
+    using var reader = new StreamReader(connectionFailuresFile);
     var config = new CsvConfiguration(CultureInfo.InvariantCulture)
     {
         HasHeaderRecord = false,
