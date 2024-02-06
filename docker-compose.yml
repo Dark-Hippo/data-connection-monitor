@@ -9,11 +9,10 @@ services:
       - ./output:/app/output
     restart: unless-stopped
   api:
-    image: mcr.microsoft.com/devcontainers/dotnet:1-8.0-bookworm
-    command: ["/bin/bash", "-c", "dotnet run --project DataConnectionMonitorAPI.csproj"]
+    build: ./DataConnectionMonitorAPI
+    image: data-connection-monitor-api
     working_dir: /app
     volumes:
-      - ./DataConnectionMonitorAPI:/app
       - ./output:/app/data
     restart: unless-stopped
     ports:
