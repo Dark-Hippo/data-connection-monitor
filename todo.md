@@ -10,11 +10,12 @@
 
 ## DataConnectionMonitorAPI
 
-- [ ] Add dockerfile with multi-stage build and proper build process.
+- [x] Add dockerfile with multi-stage build and proper build process.
 - [x] Add endpoint for lastSuccessfulConnection endpoint.
-- [ ] Get UI address from environment variable for CORS
 - [ ] Read connection status from file, implement web socket to push status to UI.
+- [ ] Read last successful connection from file, implement web socket to push status to UI.
 - [ ] Look at authentication for API.
+- [ ] Add readme for API.
 
 ## DataConnectionMonitorUI
 
