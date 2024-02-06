@@ -13,17 +13,19 @@ builder.Configuration.SetBasePath(Directory.GetCurrentDirectory())
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer()
-    .AddSwaggerGen()
-    .AddCors(options => // Add CORS services
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddCors(options => // Add CORS services
+{
+    options.AddPolicy("AllowAllOrigins", builder =>
     {
-        options.AddPolicy("AllowAllOrigins", builder =>
-        {
-            builder.WithOrigins("*")
-                .AllowAnyMethod()
-                .AllowAnyHeader();
-        });
+        builder.WithOrigins("*")
+            .AllowAnyMethod()
+            .AllowAnyHeader();
     });
+});
+builder.Services.AddSignalR();
+builder.Services.AddHostedService<LastPingService>();
 
 var app = builder.Build();
 
@@ -59,13 +61,14 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    
 }
 
 // app.UseHttpsRedirection();
 
 // Use CORS middleware
 app.UseCors("AllowAllOrigins");
+
+app.MapHub<PingHub>("/last-ping");
 
 app.MapGet("/disconnections", (DateTime? fromDate, DateTime? toDate) =>
 {
@@ -75,13 +78,13 @@ app.MapGet("/disconnections", (DateTime? fromDate, DateTime? toDate) =>
 .WithName("GetDisconnections")
 .WithOpenApi();
 
-app.MapGet("/last-ping", () =>
-{
-    var lastConnection = File.ReadAllText(lastSuccessfulConnectionFile);
-    return lastConnection;
-})
-.WithName("GetLastConnection")
-.WithOpenApi();
+// app.MapGet("/last-ping", () =>
+// {
+//     var lastConnection = File.ReadAllText(lastSuccessfulConnectionFile);
+//     return lastConnection;
+// })
+// .WithName("GetLastConnection")
+// .WithOpenApi();
 
 app.Run();
 
