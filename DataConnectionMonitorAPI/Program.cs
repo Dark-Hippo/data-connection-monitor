@@ -25,12 +25,7 @@ builder.Services.AddEndpointsApiExplorer()
         });
     });
 
-var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
-
-builder.WebHost.UseUrls($"http://*:{port}");
-
 var app = builder.Build();
-
 
 var disconnectionsFile = app.Configuration["DisconnectionsFile"];
 if(string.IsNullOrEmpty(disconnectionsFile))
@@ -50,6 +45,14 @@ if(string.IsNullOrEmpty(currentStatusFile))
     throw new InvalidOperationException("CurrentStatusFile is not set");
 }
 
+var success = int.TryParse(app.Configuration["Port"], out int port);
+if(!success)
+{
+    throw new InvalidOperationException("Port is not set");
+}
+
+app.Urls.Add($"http://*:{port}");
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -59,7 +62,7 @@ if (app.Environment.IsDevelopment())
     
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 // Use CORS middleware
 app.UseCors("AllowAllOrigins");
@@ -74,7 +77,6 @@ app.MapGet("/disconnections", (DateTime? fromDate, DateTime? toDate) =>
 
 app.MapGet("/last-ping", () =>
 {
-    // read the lastSuccessfulConnection.txt file
     var lastConnection = File.ReadAllText(lastSuccessfulConnectionFile);
     return lastConnection;
 })
