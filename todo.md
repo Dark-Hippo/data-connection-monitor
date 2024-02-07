@@ -19,6 +19,8 @@
 - [ ] Look at authentication for API.
 - [ ] Add readme for API.
 - [ ] Add namespaces for custom classes.
+- [ ] Add logging to file and associated classes.
+- [ ] Add single reference to config file.
 
 ## DataConnectionMonitorUI
 
