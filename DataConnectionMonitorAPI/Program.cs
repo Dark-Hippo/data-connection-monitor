@@ -1,5 +1,6 @@
 using CsvHelper;
 using CsvHelper.Configuration;
+using DataConnectionMonitorAPI;
 using System.Globalization;
 
 var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
@@ -30,25 +31,25 @@ builder.Services.AddHostedService<LastPingService>();
 var app = builder.Build();
 
 var disconnectionsFile = app.Configuration["DisconnectionsFile"];
-if(string.IsNullOrEmpty(disconnectionsFile))
+if (string.IsNullOrEmpty(disconnectionsFile))
 {
     throw new InvalidOperationException("DisconnectionsFile is not set");
 }
 
 var lastSuccessfulConnectionFile = app.Configuration["LastSuccessfulConnectionFile"];
-if(string.IsNullOrEmpty(lastSuccessfulConnectionFile))
+if (string.IsNullOrEmpty(lastSuccessfulConnectionFile))
 {
     throw new InvalidOperationException("LastSuccessfulConnectionFile is not set");
 }
 
 var currentStatusFile = app.Configuration["CurrentStatusFile"];
-if(string.IsNullOrEmpty(currentStatusFile))
+if (string.IsNullOrEmpty(currentStatusFile))
 {
     throw new InvalidOperationException("CurrentStatusFile is not set");
 }
 
 var success = int.TryParse(app.Configuration["Port"], out int port);
-if(!success)
+if (!success)
 {
     throw new InvalidOperationException("Port is not set");
 }
@@ -68,7 +69,7 @@ if (app.Environment.IsDevelopment())
 // Use CORS middleware
 app.UseCors("AllowAllOrigins");
 
-app.MapHub<PingHub>("/last-ping");
+app.MapHub<DisconnectionsHub>("/last-ping").RequireCors("AllowAllOrigins");
 
 app.MapGet("/disconnections", (DateTime? fromDate, DateTime? toDate) =>
 {
