@@ -23,8 +23,8 @@ namespace DataConnectionMonitorAPI
         throw new InvalidOperationException("LastSuccessfulConnectionFile is not set");
       }
 
-      var path = _lastSuccessfulConnectionFile.Substring(0, _lastSuccessfulConnectionFile.LastIndexOf('/'));
-      var fileName = _lastSuccessfulConnectionFile.Substring(_lastSuccessfulConnectionFile.LastIndexOf('/') + 1);
+      var path = _lastSuccessfulConnectionFile[.._lastSuccessfulConnectionFile.LastIndexOf('/')];
+      var fileName = _lastSuccessfulConnectionFile[(_lastSuccessfulConnectionFile.LastIndexOf('/') + 1)..];
 
       _logger.LogInformation("Watching file {fileName} at {path}", fileName, path);
 
