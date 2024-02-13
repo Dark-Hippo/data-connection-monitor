@@ -12,13 +12,13 @@
 
 - [x] Add dockerfile with multi-stage build and proper build process.
 - [x] Add endpoint for lastSuccessfulConnection endpoint.
-- [ ] Implement file monitoring for connection status.
-- [ ] Implement file monitoring for last successful connection.
-- [ ] Read connection status from file, implement web socket to push status to UI.
-- [ ] Read last successful connection from file, implement web socket to push status to UI.
+- [x] Implement file monitoring for connection status.
+- [x] Implement file monitoring for last successful connection.
+- [x] Read connection status from file, implement web socket to push status to UI.
+- [x] Read last successful connection from file, implement web socket to push status to UI.
 - [ ] Look at authentication for API.
 - [ ] Add readme for API.
-- [ ] Add namespaces for custom classes.
+- [x] Add namespaces for custom classes.
 - [ ] Add logging to file and associated classes.
 - [ ] Add single reference to config file.
 
