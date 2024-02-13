@@ -1,6 +1,7 @@
 using CsvHelper;
 using CsvHelper.Configuration;
 using DataConnectionMonitorAPI;
+using Microsoft.Extensions.Options;
 using System.Globalization;
 
 var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
@@ -28,35 +29,21 @@ builder.Services.AddCors(options => // Add CORS services
 builder.Services.AddSignalR();
 builder.Services.AddHostedService<LastSuccessfulConnectionService>();
 builder.Services.AddHostedService<CurrentConnectionStatusService>();
+builder.Services.Configure<Config>(builder.Configuration.GetSection("Config"));
 
 var app = builder.Build();
 
-var disconnectionsFile = app.Configuration["DisconnectionsFile"];
+var configuration = app.Services.GetRequiredService<IOptions<Config>>().Value;
+
+var disconnectionsFile = configuration.DisconnectionsFile;
 if (string.IsNullOrEmpty(disconnectionsFile))
 {
     throw new InvalidOperationException("DisconnectionsFile is not set");
 }
 
-var lastSuccessfulConnectionFile = app.Configuration["LastSuccessfulConnectionFile"];
-if (string.IsNullOrEmpty(lastSuccessfulConnectionFile))
-{
-    throw new InvalidOperationException("LastSuccessfulConnectionFile is not set");
-}
-
-var currentStatusFile = app.Configuration["CurrentStatusFile"];
-if (string.IsNullOrEmpty(currentStatusFile))
-{
-    throw new InvalidOperationException("CurrentStatusFile is not set");
-}
-
-var success = int.TryParse(app.Configuration["Port"], out int port);
-if (!success)
-{
-    throw new InvalidOperationException("Port is not set");
-}
+var port = configuration.Port;
 
 app.Urls.Add($"http://*:{port}");
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

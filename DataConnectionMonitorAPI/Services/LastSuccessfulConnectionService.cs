@@ -1,24 +1,27 @@
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Options;
 
 namespace DataConnectionMonitorAPI
 {
   public class LastSuccessfulConnectionService : BackgroundService
   {
     private readonly IHubContext<DisconnectionsHub> _hubContext;
-    private readonly IConfiguration _configuration;
     private readonly ILogger<LastSuccessfulConnectionService> _logger;
     private readonly FileSystemWatcher _watcher;
+    private readonly Config _configuration;
 
     private readonly string _lastSuccessfulConnectionFile;
 
-    public LastSuccessfulConnectionService(IHubContext<DisconnectionsHub> hubContext, IConfiguration configuration, ILogger<LastSuccessfulConnectionService> logger)
+    public LastSuccessfulConnectionService(IHubContext<DisconnectionsHub> hubContext, ILogger<LastSuccessfulConnectionService> logger, IOptions<Config> configuration)
     {
       _hubContext = hubContext;
-      _configuration = configuration;
       _logger = logger;
-      _lastSuccessfulConnectionFile = _configuration["LastSuccessfulConnectionFile"] ?? "";
+      _configuration = configuration.Value;
+      _lastSuccessfulConnectionFile = _configuration.LastSuccessfulConnectionFile ?? "";
+
       if (string.IsNullOrEmpty(_lastSuccessfulConnectionFile))
       {
+        _logger.LogError("LastSuccessfulConnectionFile is not set");
         throw new InvalidOperationException("LastSuccessfulConnectionFile is not set");
       }
 

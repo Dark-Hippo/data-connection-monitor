@@ -1,24 +1,27 @@
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Options;
 
 namespace DataConnectionMonitorAPI
 {
   public class CurrentConnectionStatusService : BackgroundService
   {
     private readonly IHubContext<DisconnectionsHub> _hubContext;
-    private readonly IConfiguration _configuration;
     private readonly ILogger<CurrentConnectionStatusService> _logger;
     private readonly FileSystemWatcher _watcher;
+    private readonly Config _configuration;
 
     private readonly string _currentStatusFile;
 
-    public CurrentConnectionStatusService(IHubContext<DisconnectionsHub> hubContext, IConfiguration configuration, ILogger<CurrentConnectionStatusService> logger)
+    public CurrentConnectionStatusService(IHubContext<DisconnectionsHub> hubContext, ILogger<CurrentConnectionStatusService> logger, IOptions<Config> configuration)
     {
       _hubContext = hubContext;
-      _configuration = configuration;
+      _configuration = configuration.Value;
       _logger = logger;
-      _currentStatusFile = _configuration["CurrentStatusFile"] ?? "";
+      _currentStatusFile = _configuration.CurrentStatusFile ?? "";
+
       if (string.IsNullOrEmpty(_currentStatusFile))
       {
+        _logger.LogError("CurrentStatusFile is not set");
         throw new InvalidOperationException("CurrentStatusFile is not set");
       }
 
