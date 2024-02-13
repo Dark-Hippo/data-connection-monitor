@@ -70,7 +70,7 @@ if (app.Environment.IsDevelopment())
 // Use CORS middleware
 app.UseCors("AllowAllOrigins");
 
-app.MapHub<DisconnectionsHub>("/last-ping").RequireCors("AllowAllOrigins");
+app.MapHub<DisconnectionsHub>("/disconnections-hub").RequireCors("AllowAllOrigins");
 
 app.MapGet("/disconnections", (DateTime? fromDate, DateTime? toDate) =>
 {
