@@ -27,6 +27,7 @@ builder.Services.AddCors(options => // Add CORS services
 });
 builder.Services.AddSignalR();
 builder.Services.AddHostedService<LastSuccessfulConnectionService>();
+builder.Services.AddHostedService<CurrentConnectionStatusService>();
 
 var app = builder.Build();
 
@@ -78,14 +79,6 @@ app.MapGet("/disconnections", (DateTime? fromDate, DateTime? toDate) =>
 })
 .WithName("GetDisconnections")
 .WithOpenApi();
-
-// app.MapGet("/last-ping", () =>
-// {
-//     var lastConnection = File.ReadAllText(lastSuccessfulConnectionFile);
-//     return lastConnection;
-// })
-// .WithName("GetLastConnection")
-// .WithOpenApi();
 
 app.Run();
 
