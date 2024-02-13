@@ -17,7 +17,7 @@
 - [x] Read connection status from file, implement web socket to push status to UI.
 - [x] Read last successful connection from file, implement web socket to push status to UI.
 - [ ] Look at authentication for API.
-- [ ] Add readme for API.
+- [x] Add readme for API.
 - [x] Add namespaces for custom classes.
 - [ ] Add logging to file and associated classes.
 - [ ] Add single reference to config file.
