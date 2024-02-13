@@ -1,0 +1,27 @@
+# Ignore .git directory
+.git
+
+# Ignore obj and bin directories
+**/obj/
+**/bin/
+
+# Ignore any .vs directory
+.vs
+
+# Ignore all log files
+*.log
+
+# Ignore all user secrets
+**/Properties/usersecrets.json
+
+# Ignore Dockerfile
+Dockerfile
+
+# Ignore docker-compose files
+docker-compose*
+
+# Ignore data directory
+data/
+
+# Ignore out directory
+out/
