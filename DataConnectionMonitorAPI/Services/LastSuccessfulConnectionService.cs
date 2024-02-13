@@ -49,7 +49,7 @@ namespace DataConnectionMonitorAPI
       try
       {
         var lastConnection = File.ReadAllText(_lastSuccessfulConnectionFile);
-        _hubContext.Clients.All.SendAsync("ReceiveLastConnection", lastConnection);
+        _hubContext.Clients.All.SendAsync("LastSuccessfulConnection", lastConnection);
       }
       catch (Exception)
       {
