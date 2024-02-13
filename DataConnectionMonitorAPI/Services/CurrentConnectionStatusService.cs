@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace DataConnectionMonitorAPI
 {
-
   public class CurrentConnectionStatusService : BackgroundService
   {
     private readonly IHubContext<DisconnectionsHub> _hubContext;
