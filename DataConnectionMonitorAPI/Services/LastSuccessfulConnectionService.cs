@@ -47,7 +47,17 @@ namespace DataConnectionMonitorAPI
     private void OnChanged(object sender, FileSystemEventArgs e)
     {
       _logger.LogInformation("File changed: {name} at {time}", e.Name, DateTime.Now.ToLongTimeString());
-      _hubContext.Clients.All.SendAsync("ReceiveLastConnection", DateTime.Now);
+      try
+      {
+        var lastConnection = File.ReadAllText(_lastSuccessfulConnectionFile);
+        _hubContext.Clients.All.SendAsync("ReceiveLastConnection", lastConnection);
+      }
+      catch (Exception)
+      {
+        // Log the error, but don't do anything else. Chances are the file is being written to 
+        // and we'll get another event soon.
+        _logger.LogError("Error reading file {file}", _lastSuccessfulConnectionFile);
+      }
     }
   }
 }
