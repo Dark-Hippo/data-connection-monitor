@@ -26,7 +26,7 @@ builder.Services.AddCors(options => // Add CORS services
     });
 });
 builder.Services.AddSignalR();
-builder.Services.AddHostedService<LastPingService>();
+builder.Services.AddHostedService<LastSuccessfulConnectionService>();
 
 var app = builder.Build();
 

@@ -3,16 +3,16 @@ using Microsoft.AspNetCore.SignalR;
 namespace DataConnectionMonitorAPI
 {
 
-  public class LastPingService : BackgroundService
+  public class LastSuccessfulConnectionService : BackgroundService
   {
     private readonly IHubContext<DisconnectionsHub> _hubContext;
     private readonly IConfiguration _configuration;
-    private readonly ILogger<LastPingService> _logger;
+    private readonly ILogger<LastSuccessfulConnectionService> _logger;
     private readonly FileSystemWatcher _watcher;
 
     private readonly string _lastSuccessfulConnectionFile;
 
-    public LastPingService(IHubContext<DisconnectionsHub> hubContext, IConfiguration configuration, ILogger<LastPingService> logger)
+    public LastSuccessfulConnectionService(IHubContext<DisconnectionsHub> hubContext, IConfiguration configuration, ILogger<LastSuccessfulConnectionService> logger)
     {
       _hubContext = hubContext;
       _configuration = configuration;
@@ -38,22 +38,16 @@ namespace DataConnectionMonitorAPI
       _watcher.Changed += OnChanged;
     }
 
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    protected override Task<Task> ExecuteAsync(CancellationToken stoppingToken)
     {
       _watcher.EnableRaisingEvents = true;
-
-      while (!stoppingToken.IsCancellationRequested)
-      {
-        var lastConnection = File.ReadAllText(_lastSuccessfulConnectionFile);
-        _logger.LogInformation("Ping sent at {time}", DateTime.Now.ToString());
-        await _hubContext.Clients.All.SendAsync("ReceiveLastConnection", lastConnection, cancellationToken: stoppingToken);
-        await Task.Delay(1000, stoppingToken);
-      }
+      return Task.FromResult(Task.CompletedTask);
     }
 
     private void OnChanged(object sender, FileSystemEventArgs e)
     {
       _logger.LogInformation("File changed: {name} at {time}", e.Name, DateTime.Now.ToLongTimeString());
+      _hubContext.Clients.All.SendAsync("ReceiveLastConnection", DateTime.Now);
     }
   }
 }
