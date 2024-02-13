@@ -3,7 +3,7 @@ using CsvHelper.Configuration.Attributes;
 namespace DataConnectionMonitorAPI
 {
 
-    class Disconnection
+    public class Disconnection
     {
         [Index(0)]
         public DateTime Start { get; set; }

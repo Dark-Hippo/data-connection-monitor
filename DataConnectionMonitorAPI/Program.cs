@@ -1,8 +1,5 @@
-using CsvHelper;
-using CsvHelper.Configuration;
 using DataConnectionMonitorAPI;
 using Microsoft.Extensions.Options;
-using System.Globalization;
 
 var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
 
@@ -30,16 +27,18 @@ builder.Services.AddSignalR();
 builder.Services.AddHostedService<LastSuccessfulConnectionService>();
 builder.Services.AddHostedService<CurrentConnectionStatusService>();
 builder.Services.Configure<Config>(builder.Configuration.GetSection("Config"));
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
-var configuration = app.Services.GetRequiredService<IOptions<Config>>().Value;
-
-var disconnectionsFile = configuration.DisconnectionsFile;
-if (string.IsNullOrEmpty(disconnectionsFile))
+app.UseRouting()
+.UseCors("AllowAllOrigins")
+.UseEndpoints(endpoints =>
 {
-    throw new InvalidOperationException("DisconnectionsFile is not set");
-}
+    endpoints.MapControllers();
+});
+
+var configuration = app.Services.GetRequiredService<IOptions<Config>>().Value;
 
 var port = configuration.Port;
 
@@ -59,37 +58,4 @@ app.UseCors("AllowAllOrigins");
 
 app.MapHub<DisconnectionsHub>("/disconnections-hub").RequireCors("AllowAllOrigins");
 
-app.MapGet("/disconnections", (DateTime? fromDate, DateTime? toDate) =>
-{
-    var disconnections = GetDisconnections(fromDate, toDate);
-    return disconnections;
-})
-.WithName("GetDisconnections")
-.WithOpenApi();
-
 app.Run();
-
-List<Disconnection> GetDisconnections(DateTime? fromDate, DateTime? toDate)
-{
-    // read data from connectionFailures.csv
-    using var reader = new StreamReader(disconnectionsFile);
-    var config = new CsvConfiguration(CultureInfo.InvariantCulture)
-    {
-        HasHeaderRecord = false,
-        Delimiter = ","
-    };
-    using var csv = new CsvReader(reader, config);
-    var disconnections = csv.GetRecords<Disconnection>().ToList();
-
-    // filter by date
-    if (fromDate.HasValue)
-    {
-        disconnections = disconnections.Where(d => d.Start >= fromDate).ToList();
-    }
-    if (toDate.HasValue)
-    {
-        disconnections = disconnections.Where(d => d.Start <= toDate).ToList();
-    }
-
-    return disconnections;
-}
