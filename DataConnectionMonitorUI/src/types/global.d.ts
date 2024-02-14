@@ -1,6 +1,6 @@
 type DisconnectionsProps = {
-  disconnections: { 
-    [date: string]: DisconnectionData[] 
+  disconnections: {
+    [date: string]: DisconnectionData[];
   };
 };
 
