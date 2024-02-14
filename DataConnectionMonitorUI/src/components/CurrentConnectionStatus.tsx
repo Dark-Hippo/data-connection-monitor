@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Wifi, WifiOff, Exclamation } from 'react-bootstrap-icons';
+import { Wifi, WifiOff, ExclamationOctagon } from 'react-bootstrap-icons';
 
 import './CurrentConnectionStatus.css';
 
@@ -18,11 +18,10 @@ export const CurrentConnectionStatus = (props: CurrentConnectionStatusProps) => 
   const [statusElement, setStatusElement] = useState<JSX.Element>(<Wifi />);
 
   useEffect(() => {
-    console.log("CurrentConnectionStatus: ", connectionStatus)
     if (connectionStatus === ConnectionStatus.Connected) {
       setStatusElement(<Wifi />);
     } else if (connectionStatus === ConnectionStatus.Retrying) {
-      setStatusElement(<Exclamation />);
+      setStatusElement(<ExclamationOctagon />);
     } else {
       setStatusElement(<WifiOff />);
     }
