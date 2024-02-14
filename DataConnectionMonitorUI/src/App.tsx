@@ -11,6 +11,7 @@ import { ThemeSwitcher } from "./components/ThemeSwitcher";
 import { DisconnectionDate } from "./components/DisconnectionDate";
 import { BackArrow } from "./components/BackArrow";
 import { CurrentConnectionStatus, ConnectionStatus } from "./components/CurrentConnectionStatus";
+import { LastSuccessfulConnection } from "./components/LastSuccessfulConnection";
 
 function App() {
   const {
@@ -20,10 +21,8 @@ function App() {
     disconnectionsByDate,
   } = useDisconnectionsData();
 
-  const currentConnectionStatus = useRef<HTMLSpanElement>(null);
-  const lastSuccessfulConnection = useRef<HTMLSpanElement>(null);
-
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(ConnectionStatus.Connected);
+  const [lastConnection, setLastConnection] = useState<string>();
 
   const { theme } = useTheme();
 
@@ -47,16 +46,11 @@ function App() {
     .build();
 
   connection.on("LastSuccessfulConnection", (lastConnection: string) => {
-    lastSuccessfulConnection.current!.innerText = lastConnection;
+    setLastConnection(lastConnection);
   });
 
   connection.on("CurrentConnectionStatus", (status: string) => {
     setConnectionStatus(status as ConnectionStatus);
-    const s = status as ConnectionStatus;
-    console.log("connection status: ", s);
-    s === ConnectionStatus.Connected ?
-      currentConnectionStatus.current!.innerText = "True" :
-      currentConnectionStatus.current!.innerText = "False";
   });
 
   connection.start().then(() => {
@@ -77,12 +71,11 @@ function App() {
           Connection Monitor
         </h1>
         <CurrentConnectionStatus connectionStatus={connectionStatus} />
+        <LastSuccessfulConnection time={lastConnection} />
         <h3>
           Total disconnections since monitoring began: <span className="primary-emphasis">{totalDisconnections}</span>
         </h3>
         <h3>Longest disconnection: <span className="primary-emphasis">{longestDisconnection}</span></h3>
-        <h3>Last successful connection: <span className="primary-emphasis" ref={lastSuccessfulConnection}></span></h3>
-        <h3>Current connection status: <span className="primary-emphasis" ref={currentConnectionStatus}></span></h3>
         <Routes>
           <Route
             path="/"
