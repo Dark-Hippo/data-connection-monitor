@@ -6,7 +6,7 @@ export const ThemeSwitcher = () => {
 
   return (
     <div>
-      <MoonStars style={{ width: "0.75em", height: "0.75em" }} onClick={toggleTheme} />
+      <MoonStars style={{ width: "1em", height: "1em" }} onClick={toggleTheme} />
     </div>
   );
 };
