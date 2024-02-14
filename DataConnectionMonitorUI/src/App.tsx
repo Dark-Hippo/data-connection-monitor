@@ -6,7 +6,7 @@ import * as signalR from "@microsoft/signalr";
 import { useTheme } from "./contexts/ThemeContext";
 
 import "./App.css";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { ThemeSwitcher } from "./components/ThemeSwitcher";
 import { DisconnectionDate } from "./components/DisconnectionDate";
 import { BackArrow } from "./components/BackArrow";
