@@ -1,20 +1,30 @@
 header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   color: var(--bs-body-color);
-  margin-bottom: 20px;
+  margin-bottom: 1rem;
+  padding-top: 1rem;
 }
 
-header h3{
-  color: var(--bs-secondary-color);
-}
-
-header .primary-emphasis {
-  color: var(--bs-primary-text-emphasis);
+header > div {
+  display: flex;
 }
 
 main {
   padding-bottom: 20px;
 }
 
-.container, .container-fluid, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+main > h1 {
+  padding-bottom: 1rem;
+}
+
+.container,
+.container-fluid,
+.container-lg,
+.container-md,
+.container-sm,
+.container-xl,
+.container-xxl {
   background-color: var(--bs-body-bg);
 }
