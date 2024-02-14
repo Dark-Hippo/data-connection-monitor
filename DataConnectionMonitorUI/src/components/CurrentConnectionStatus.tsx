@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Wifi, WifiOff, Exclamation } from 'react-bootstrap-icons';
 
 import './CurrentConnectionStatus.css';
@@ -15,21 +15,22 @@ export enum ConnectionStatus {
 
 export const CurrentConnectionStatus = (props: CurrentConnectionStatusProps) => {
   const { connectionStatus } = props;
-  let element: JSX.Element = <Wifi />;
+  const [statusElement, setStatusElement] = useState<JSX.Element>(<Wifi />);
 
   useEffect(() => {
+    console.log("CurrentConnectionStatus: ", connectionStatus)
     if (connectionStatus === ConnectionStatus.Connected) {
-      element = <Wifi />
+      setStatusElement(<Wifi />);
     } else if (connectionStatus === ConnectionStatus.Retrying) {
-      element = <Exclamation />
+      setStatusElement(<Exclamation />);
     } else {
-      element = <WifiOff />
+      setStatusElement(<WifiOff />);
     }
   }, [connectionStatus]);
 
   return (
     <div className='connection-status'>
-      <div className='connection-status-icon'>{element}</div>
+      <div className='connection-status-icon'>{statusElement}</div>
       <div className='connection-status-text'>
         <strong>Connection Status</strong><br />
         {connectionStatus}
