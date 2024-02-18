@@ -12,6 +12,8 @@ import { DisconnectionDate } from "./components/DisconnectionDate";
 import { BackArrow } from "./components/BackArrow";
 import { CurrentConnectionStatus, ConnectionStatus } from "./components/CurrentConnectionStatus";
 import { LastSuccessfulConnection } from "./components/LastSuccessfulConnection";
+import { DisconnectionsList } from "./components/DisconnectionsList";
+import { DisconnectionStats } from "./components/DisconnectionStats";
 
 function App() {
   const {
@@ -72,18 +74,23 @@ function App() {
         </h1>
         <CurrentConnectionStatus connectionStatus={connectionStatus} />
         <LastSuccessfulConnection time={lastConnection} />
-        <h3>
+        {/* <h3>
           Total disconnections since monitoring began: <span className="primary-emphasis">{totalDisconnections}</span>
         </h3>
-        <h3>Longest disconnection: <span className="primary-emphasis">{longestDisconnection}</span></h3>
+        <h3>Longest disconnection: <span className="primary-emphasis">{longestDisconnection}</span></h3> */}
+        <div><strong>Disconnections</strong></div>
         <Routes>
           <Route
             path="/"
-            element={<Disconnections disconnections={disconnectionsByDate} />}
+            element={<DisconnectionsList disconnections={disconnectionsByDate} />}
           />
           <Route
             path="/:date"
             element={<Disconnections disconnections={disconnectionsByDate} />}
+          />
+          <Route
+            path="/stats"
+            element={<DisconnectionStats totalDisconnections={totalDisconnections} totalDowntime={""} longestDisconnection={longestDisconnection} />}
           />
         </Routes>
       </main>
