@@ -42,7 +42,7 @@ if (string.IsNullOrEmpty(currentStatusFile))
 }
 
 var IPAddresses = configuration.GetSection("IPAddresses").Get<List<IPAddress>>();
-if(IPAddresses == null || IPAddresses.Count == 0)
+if (IPAddresses == null || IPAddresses.Count == 0)
 {
   throw new InvalidOperationException("IPAddresses is not set");
 }
@@ -114,7 +114,7 @@ while (true)
         if (retryCount >= maxRetries)
         {
           connectionState = ConnectionState.Disconnected;
-        WriteCurrentStatusToFile(connectionState);
+          WriteCurrentStatusToFile(connectionState);
           retryCount = 0;
         }
       }
@@ -152,7 +152,7 @@ void WriteSuccessToFile()
 {
   var successFile = lastSuccessfulConnectionsFile;
   using var writer = new StreamWriter(successFile, false);
-  writer.WriteLine($"Last successful ping at {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
+  writer.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}");
 }
 
 void WriteCurrentStatusToFile(ConnectionState connectionState)
