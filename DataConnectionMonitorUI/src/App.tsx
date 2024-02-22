@@ -20,6 +20,7 @@ function App() {
     loading,
     totalDisconnections,
     longestDisconnection,
+    groupedDisconnections,
     disconnectionsByDate,
   } = useDisconnectionsData();
 
@@ -74,15 +75,12 @@ function App() {
         </h1>
         <CurrentConnectionStatus connectionStatus={connectionStatus} />
         <LastSuccessfulConnection time={lastConnection} />
-        {/* <h3>
-          Total disconnections since monitoring began: <span className="primary-emphasis">{totalDisconnections}</span>
-        </h3>
-        <h3>Longest disconnection: <span className="primary-emphasis">{longestDisconnection}</span></h3> */}
-        <div><strong>Disconnections</strong></div>
+
+        <strong>Disconnections</strong>
         <Routes>
           <Route
             path="/"
-            element={<DisconnectionsList disconnections={disconnectionsByDate} />}
+            element={<DisconnectionsList disconnections={groupedDisconnections} />}
           />
           <Route
             path="/:date"

@@ -2,22 +2,23 @@ import { ReactElement } from "react";
 import { DisconnectionsListItem } from "./DisconnectionsListItem";
 
 type DisconnectionsListProps = {
-  disconnections: {
-    [date: string]: DisconnectionData[];
-  };
+  disconnections: GroupedDisconnection[];
 };
 
 export const DisconnectionsList = (props: DisconnectionsListProps): ReactElement => {
   const { disconnections } = props;
 
+  // sort disconnections by date order
+  disconnections.sort((a, b) => b.date.getTime() - a.date.getTime());
+
   return (
     <div>
-      {Object.keys(disconnections).map((date) => {
+      {disconnections.map((day) => {
         return (
           <DisconnectionsListItem
-            key={date}
-            date={date}
-            disconnectionCount={disconnections[date].length}
+            key={day.date.getTime()}
+            date={day.date}
+            disconnectionCount={day.disconnections.length}
           />
         );
       })}
