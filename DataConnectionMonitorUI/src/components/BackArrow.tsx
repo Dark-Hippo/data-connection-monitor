@@ -1,9 +1,10 @@
 import { ArrowLeft } from 'react-bootstrap-icons';
+import { NavLink } from 'react-router-dom';
 
 export const BackArrow = () => {
   return (
-    <div>
+    <NavLink to={'/'}>
       <ArrowLeft style={{ width: "1em", height: "1em" }} />
-    </div>
+    </NavLink>
   )
 }
