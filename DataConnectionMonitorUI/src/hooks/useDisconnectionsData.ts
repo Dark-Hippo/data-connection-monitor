@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 
 export const useDisconnectionsData = () => {
-  const [disconnections, setDisconnections] = useState<DisconnectionData[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalDisconnections, setTotalDisconnections] = useState(0);
   const [longestDisconnection, setLongestDisconnection] = useState(0);
   const [disconnectionsByDate, setDisconnectionsByDate] = useState<{
     [date: string]: DisconnectionData[];
   }>({});
+  const [groupedDisconnections, setGroupedDisconnections] = useState<
+    GroupedDisconnection[]
+  >([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -17,8 +19,9 @@ export const useDisconnectionsData = () => {
         ...item,
         start: new Date(item.start),
       }));
-      setDisconnections(dataWithDates);
+
       setTotalDisconnections(dataWithDates.length);
+
       setLongestDisconnection(
         [...dataWithDates].sort((a, b) => b.duration - a.duration)[0].downtime
       );
@@ -34,17 +37,38 @@ export const useDisconnectionsData = () => {
         },
         {}
       );
+
       setDisconnectionsByDate(disconnectionsByDate);
+
+      const grouped: GroupedDisconnection[] = [];
+      for (const date in disconnectionsByDate) {
+        const disconnections = disconnectionsByDate[date];
+        const totalDowntime = disconnections.reduce(
+          (acc: number, curr: any) => acc + curr.downtime,
+          0
+        );
+        const averageDowntime = totalDowntime / disconnections.length;
+        grouped.push({
+          date: new Date(date),
+          disconnections: disconnections.map((disconnection: any) => ({
+            start: disconnection.start,
+            downtime: disconnection.downtime,
+          })),
+          totalDowntime,
+          averageDowntime,
+        });
+      }
+      setGroupedDisconnections(grouped);
       setLoading(false);
     };
     fetchData();
   }, []);
 
   return {
-    disconnections,
     loading,
     totalDisconnections,
     longestDisconnection,
     disconnectionsByDate,
+    groupedDisconnections,
   };
 };
