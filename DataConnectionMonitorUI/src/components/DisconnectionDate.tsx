@@ -1,9 +1,12 @@
 type DisconnectionProps = {
-  date: Date;
+  date?: Date;
 }
 
 export const DisconnectionDate = (props: DisconnectionProps) => {
   const { date } = props;
+
+  if (!date) return (<div></div>);
+
   const formattedDate = new Intl.DateTimeFormat('en-GB', {
     year: 'numeric',
     month: 'short',
