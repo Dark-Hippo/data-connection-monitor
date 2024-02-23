@@ -13,7 +13,6 @@ export const LastSuccessfulConnection = (props: LastSuccessfulConnectionProps) =
 
   useEffect(() => {
     const newTime = time?.substring(time.length - 9, time.length) ?? "";
-    console.log(time);
     setDisplayTime(newTime);
   }, [time]);
 
@@ -26,5 +25,4 @@ export const LastSuccessfulConnection = (props: LastSuccessfulConnectionProps) =
       </div>
     </div>
   )
-
 }
