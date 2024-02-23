@@ -24,7 +24,7 @@ function App() {
     disconnectionsByDate,
   } = useDisconnectionsData();
 
-  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(ConnectionStatus.Connected);
+  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(ConnectionStatus.Disconnected);
   const [lastConnection, setLastConnection] = useState<string>();
 
   const { theme } = useTheme();
@@ -53,7 +53,8 @@ function App() {
   });
 
   connection.on("CurrentConnectionStatus", (status: string) => {
-    setConnectionStatus(status as ConnectionStatus);
+    // need to trim() as the status file has a newline character at the end
+    setConnectionStatus(status.trim() as ConnectionStatus);
   });
 
   connection.start().then(() => {
