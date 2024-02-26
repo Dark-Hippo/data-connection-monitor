@@ -74,8 +74,8 @@ function App() {
   return (
     <Container fluid data-bs-theme={theme}>
       <header>
-        <BackArrow />
         <Routes>
+          <Route path="/:date?" element={<BackArrow />} />
           <Route path="/:date?" element={<DisconnectionDate />} />
         </Routes>
         <ThemeSwitcher />
