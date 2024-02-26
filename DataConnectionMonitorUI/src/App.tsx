@@ -67,7 +67,9 @@ function App() {
     <Container fluid data-bs-theme={theme}>
       <header>
         <BackArrow />
-        <DisconnectionDate date={new Date()} />
+        <Routes>
+          <Route path="/:date" element={<DisconnectionDate />} />
+        </Routes>
         <ThemeSwitcher />
       </header>
       <main>
