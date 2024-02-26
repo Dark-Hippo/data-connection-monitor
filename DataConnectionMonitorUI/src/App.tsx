@@ -6,7 +6,7 @@ import * as signalR from "@microsoft/signalr";
 import { useTheme } from "./contexts/ThemeContext";
 
 import "./App.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ThemeSwitcher } from "./components/ThemeSwitcher";
 import { DisconnectionDate } from "./components/DisconnectionDate";
 import { BackArrow } from "./components/BackArrow";
@@ -22,12 +22,43 @@ function App() {
     longestDisconnection,
     groupedDisconnections,
     disconnectionsByDate,
+    totalDowntime,
   } = useDisconnectionsData();
 
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(ConnectionStatus.Disconnected);
   const [lastConnection, setLastConnection] = useState<string>();
 
   const { theme } = useTheme();
+
+  useEffect(() => {
+    const connection = new signalR.HubConnectionBuilder()
+      .withUrl("http://localhost:5000/disconnections-hub",
+        {
+          skipNegotiation: true,
+          transport: signalR.HttpTransportType.WebSockets
+        })
+      .build();
+
+    connection.on("LastSuccessfulConnection", (lastConnection: string) => {
+      setLastConnection(lastConnection);
+    });
+
+    connection.on("CurrentConnectionStatus", (status: string) => {
+      // need to trim() as the status file has a newline character at the end
+      setConnectionStatus(status.trim() as ConnectionStatus);
+    });
+
+    connection.start();
+
+    connection.onclose(() => {
+      setConnectionStatus(ConnectionStatus.Disconnected);
+    });
+
+    // .catch((err) => {
+    //   console.error("error connecting to disconnections hub", err);
+    // });
+
+  }, []);
 
   if (loading) {
     return (
@@ -40,35 +71,12 @@ function App() {
     );
   }
 
-  const connection = new signalR.HubConnectionBuilder()
-    .withUrl("http://localhost:5000/disconnections-hub",
-      {
-        skipNegotiation: true,
-        transport: signalR.HttpTransportType.WebSockets
-      })
-    .build();
-
-  connection.on("LastSuccessfulConnection", (lastConnection: string) => {
-    setLastConnection(lastConnection);
-  });
-
-  connection.on("CurrentConnectionStatus", (status: string) => {
-    // need to trim() as the status file has a newline character at the end
-    setConnectionStatus(status.trim() as ConnectionStatus);
-  });
-
-  connection.start().then(() => {
-    console.log("connected to disconnections hub!");
-  }).catch((err) => {
-    console.log("error connecting to disconnections hub", err);
-  });
-
   return (
     <Container fluid data-bs-theme={theme}>
       <header>
         <BackArrow />
         <Routes>
-          <Route path="/:date" element={<DisconnectionDate />} />
+          <Route path="/:date?" element={<DisconnectionDate />} />
         </Routes>
         <ThemeSwitcher />
       </header>
@@ -91,7 +99,7 @@ function App() {
           />
           <Route
             path="/stats"
-            element={<DisconnectionStats totalDisconnections={totalDisconnections} totalDowntime={""} longestDisconnection={longestDisconnection} />}
+            element={<DisconnectionStats totalDisconnections={totalDisconnections} totalDowntime={totalDowntime} longestDisconnection={longestDisconnection} />}
           />
         </Routes>
       </main>
