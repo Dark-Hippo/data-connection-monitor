@@ -10,6 +10,7 @@ export const useDisconnectionsData = () => {
   const [groupedDisconnections, setGroupedDisconnections] = useState<
     GroupedDisconnection[]
   >([]);
+  const [totalDowntime, setTotalDowntime] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,6 +60,9 @@ export const useDisconnectionsData = () => {
         });
       }
       setGroupedDisconnections(grouped);
+      setTotalDowntime(
+        grouped.reduce((acc, curr) => acc + curr.totalDowntime, 0)
+      );
       setLoading(false);
     };
     fetchData();
@@ -70,5 +74,6 @@ export const useDisconnectionsData = () => {
     longestDisconnection,
     disconnectionsByDate,
     groupedDisconnections,
+    totalDowntime,
   };
 };
