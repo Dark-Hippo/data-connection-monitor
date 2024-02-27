@@ -6,12 +6,12 @@ type TitleContextType = {
 };
 
 const TitleContext = createContext<TitleContextType>({
-  title: 'Connection Monitor',
-  setTitle: (title: string) => { }
+  title: '',
+  setTitle: () => { }
 });
 
 export const TitleProvider = ({ children }: { children: ReactNode }) => {
-  const [title, setTitle] = useState('Connection Monitor');
+  const [title, setTitle] = useState('');
 
   return (
     <TitleContext.Provider value={{ title, setTitle }}>

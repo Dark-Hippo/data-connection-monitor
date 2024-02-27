@@ -1,5 +1,6 @@
-import { ReactElement } from "react";
+import { ReactElement, useEffect } from "react";
 import { DisconnectionsListItem } from "./DisconnectionsListItem";
+import { useTitle } from "../contexts/TitleContext";
 
 type DisconnectionsListProps = {
   disconnections: GroupedDisconnection[];
@@ -7,6 +8,11 @@ type DisconnectionsListProps = {
 
 export const DisconnectionsList = (props: DisconnectionsListProps): ReactElement => {
   const { disconnections } = props;
+  const { setTitle } = useTitle();
+
+  useEffect(() => {
+    setTitle("Connections Monitor");
+  });
 
   // sort disconnections by date order
   disconnections.sort((a, b) => b.date.getTime() - a.date.getTime());
