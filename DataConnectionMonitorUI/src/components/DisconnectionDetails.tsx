@@ -24,8 +24,7 @@ const DisconnectionDetails = (props: DisconnectionDetailsProps): ReactElement =>
 
   useEffect(() => {
     setTitle(dateStr);
-  }
-    , [dateStr]);
+  }, [dateStr]);
 
   if (!disconnections[dateStr]) {
     return <div>No disconnections for this date</div>;
@@ -46,4 +45,4 @@ const DisconnectionDetails = (props: DisconnectionDetailsProps): ReactElement =>
   )
 };
 
-export { DisconnectionDetails as Disconnections };
+export { DisconnectionDetails };
