@@ -1,5 +1,5 @@
 import { useDisconnectionsData } from "./hooks/useDisconnectionsData";
-import { Disconnections } from "./components/Disconnections";
+import { DisconnectionDetails } from "./components/DisconnectionDetails";
 import { Route, Routes } from "react-router-dom";
 import { Container, Spinner } from "react-bootstrap";
 import * as signalR from "@microsoft/signalr";
@@ -87,7 +87,7 @@ function App() {
           />
           <Route
             path="/:date"
-            element={<Disconnections disconnections={disconnectionsByDate} />}
+            element={<DisconnectionDetails disconnections={disconnectionsByDate} />}
           />
           <Route
             path="/stats"
