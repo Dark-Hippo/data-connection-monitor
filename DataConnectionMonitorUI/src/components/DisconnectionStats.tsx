@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 
 type DisconnectionStatsProps = {
   totalDisconnections: number;
-  totalDowntime: string;
+  totalDowntime: number;
   longestDisconnection: number;
 }
 
@@ -13,7 +13,7 @@ export const DisconnectionStats = (props: DisconnectionStatsProps): ReactElement
     <>
       <ul>
         <li>{totalDisconnections} total disconnections</li>
-        <li>{totalDowntime} of total downtime</li>
+        <li>{totalDowntime} seconds of total downtime</li>
         <li>Longest downtime of {longestDowntime}</li>
       </ul>
     </>

@@ -7,13 +7,11 @@ import { useTheme } from "./contexts/ThemeContext";
 
 import "./App.css";
 import { useEffect, useState } from "react";
-import { ThemeSwitcher } from "./components/ThemeSwitcher";
-import { DisconnectionDate } from "./components/DisconnectionDate";
-import { BackArrow } from "./components/BackArrow";
 import { CurrentConnectionStatus, ConnectionStatus } from "./components/CurrentConnectionStatus";
 import { LastSuccessfulConnection } from "./components/LastSuccessfulConnection";
 import { DisconnectionsList } from "./components/DisconnectionsList";
 import { DisconnectionStats } from "./components/DisconnectionStats";
+import { Header } from "./components/Header";
 
 function App() {
   const {
@@ -73,17 +71,11 @@ function App() {
 
   return (
     <Container fluid data-bs-theme={theme}>
-      <header>
-        <Routes>
-          <Route path="/:date?" element={<BackArrow />} />
-          <Route path="/:date?" element={<DisconnectionDate />} />
-        </Routes>
-        <ThemeSwitcher />
-      </header>
+      <Header />
       <main>
-        <h1>
+        {/* <h1>
           Connection Monitor
-        </h1>
+        </h1> */}
         <CurrentConnectionStatus connectionStatus={connectionStatus} />
         <LastSuccessfulConnection time={lastConnection} />
 

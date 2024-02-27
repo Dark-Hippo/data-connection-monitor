@@ -1,11 +1,7 @@
 import { ArrowLeft } from 'react-bootstrap-icons';
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 export const BackArrow = () => {
-
-  const { date } = useParams();
-
-  if (!date) return <div />;
 
   return (
     <NavLink to={'/'}>

@@ -1,6 +1,7 @@
 import { ReactElement } from "react";
 import { useParams } from "react-router-dom";
 import { ExclamationDiamond } from "react-bootstrap-icons";
+import { useTitle } from "../contexts/TitleContext";
 
 type DisconnectionDetailsProps = {
   disconnections: {
@@ -11,6 +12,7 @@ type DisconnectionDetailsProps = {
 const DisconnectionDetails = (props: DisconnectionDetailsProps): ReactElement => {
   const { disconnections } = props;
   const { date } = useParams();
+  const { setTitle } = useTitle();
 
   if (!date) {
     return (
@@ -19,6 +21,8 @@ const DisconnectionDetails = (props: DisconnectionDetailsProps): ReactElement =>
   }
 
   const dateStr = new Date(date).toDateString();
+
+  setTitle(dateStr);
 
   if (!disconnections[dateStr]) {
     return <div>No disconnections for this date</div>;

@@ -1,5 +1,4 @@
-import {createContext, useContext, useState} from 'react';
-// import { ThemeProvider } from 'react-bootstrap/ThemeProvider';
+import { createContext, useContext, useState } from 'react';
 
 import { ReactNode } from 'react';
 
@@ -10,7 +9,7 @@ interface Theme {
 
 const defaultTheme: Theme = {
   theme: 'light',
-  toggleTheme: () => {},
+  toggleTheme: () => { },
 };
 
 const ThemeContext = createContext<Theme>(defaultTheme);
