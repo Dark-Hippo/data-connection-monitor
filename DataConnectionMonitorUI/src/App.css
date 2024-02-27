@@ -17,8 +17,9 @@ main {
   gap: 1rem;
 }
 
-main h1 {
+main .title {
   color: var(--bs-body-color);
+  font-weight: bold;
 }
 
 .container,

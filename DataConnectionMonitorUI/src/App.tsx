@@ -73,13 +73,9 @@ function App() {
     <Container fluid data-bs-theme={theme}>
       <Header />
       <main>
-        {/* <h1>
-          Connection Monitor
-        </h1> */}
         <CurrentConnectionStatus connectionStatus={connectionStatus} />
         <LastSuccessfulConnection time={lastConnection} />
-
-        <strong>Disconnections</strong>
+        <div className="title">Disconnections</div>
         <Routes>
           <Route
             path="/"

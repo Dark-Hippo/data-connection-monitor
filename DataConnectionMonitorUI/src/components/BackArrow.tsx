@@ -1,11 +1,19 @@
 import { ArrowLeft } from 'react-bootstrap-icons';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
+
+import './BackArrow.css';
 
 export const BackArrow = () => {
 
+  const location = useLocation();
+
+  if (location.pathname === '/') {
+    return <div></div>;
+  }
+
   return (
-    <NavLink to={'/'}>
-      <ArrowLeft style={{ width: "1em", height: "1em" }} />
+    <NavLink className='back-arrow' to={'/'}>
+      <ArrowLeft />
     </NavLink>
   )
 }
