@@ -12,6 +12,7 @@ import { LastSuccessfulConnection } from "./components/LastSuccessfulConnection"
 import { DisconnectionsList } from "./components/DisconnectionsList";
 import { DisconnectionStats } from "./components/DisconnectionStats";
 import { Header } from "./components/Header";
+import { Footer } from "./components/Footer";
 
 function App() {
   const {
@@ -46,15 +47,14 @@ function App() {
       setConnectionStatus(status.trim() as ConnectionStatus);
     });
 
-    connection.start();
+    connection.start()
+      .catch((err) => {
+        console.error("error connecting to disconnections hub", err);
+      });
 
     connection.onclose(() => {
       setConnectionStatus(ConnectionStatus.Disconnected);
     });
-
-    // .catch((err) => {
-    //   console.error("error connecting to disconnections hub", err);
-    // });
 
   }, []);
 
@@ -91,6 +91,7 @@ function App() {
           />
         </Routes>
       </main>
+      <Footer />
     </Container>
   );
 }
