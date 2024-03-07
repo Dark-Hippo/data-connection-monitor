@@ -5,6 +5,7 @@ footer {
   right: 0;
   background-color: var(--bs-body-bg);
   height: 60px;
+  border-top: 1px solid var(--bs-secondary-bg);
 }
 
 footer nav {
