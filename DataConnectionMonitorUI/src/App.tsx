@@ -70,7 +70,7 @@ function App() {
   }
 
   return (
-    <Container fluid data-bs-theme={theme}>
+    <Container fluid data-bs-theme={theme} className="main-container">
       <Header />
       <main>
         <CurrentConnectionStatus connectionStatus={connectionStatus} />
