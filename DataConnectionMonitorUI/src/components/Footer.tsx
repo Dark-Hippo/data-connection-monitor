@@ -23,13 +23,13 @@ export const Footer = () => {
           }
           Stats
         </NavLink>
-        <NavLink to='/settings'>
+        {/* <NavLink to='/settings'>
           {location.pathname === '/settings' ?
             <GearFill className="icon" /> :
             <Gear className="icon" />
           }
           Settings
-        </NavLink>
+        </NavLink> */}
       </nav>
     </footer>
   );
