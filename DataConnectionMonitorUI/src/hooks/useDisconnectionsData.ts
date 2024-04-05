@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 export const useDisconnectionsData = () => {
   const [loading, setLoading] = useState(true);
   const [totalDisconnections, setTotalDisconnections] = useState(0);
-  const [longestDisconnection, setLongestDisconnection] = useState(0);
+  const [longestDisconnection, setLongestDisconnection] =
+    useState<DisconnectionData>();
   const [disconnectionsByDate, setDisconnectionsByDate] = useState<{
     [date: string]: DisconnectionData[];
   }>({});
@@ -23,9 +24,13 @@ export const useDisconnectionsData = () => {
 
       setTotalDisconnections(dataWithDates.length);
 
+      console.log("data", data);
+      console.log("with dates", dataWithDates);
+
       setLongestDisconnection(
-        [...dataWithDates].sort((a, b) => b.duration - a.duration)[0].downtime
+        [...dataWithDates].sort((a, b) => b.duration - a.duration)[0]
       );
+
       const disconnectionsByDate = dataWithDates.reduce(
         (acc: any, curr: any) => {
           const date = curr.start.toDateString();
@@ -45,7 +50,7 @@ export const useDisconnectionsData = () => {
       for (const date in disconnectionsByDate) {
         const disconnections = disconnectionsByDate[date];
         const totalDowntime = disconnections.reduce(
-          (acc: number, curr: any) => acc + curr.downtime,
+          (acc: number, curr: any) => acc + curr.duration,
           0
         );
         const averageDowntime = totalDowntime / disconnections.length;
@@ -60,9 +65,11 @@ export const useDisconnectionsData = () => {
         });
       }
       setGroupedDisconnections(grouped);
+
       setTotalDowntime(
         grouped.reduce((acc, curr) => acc + curr.totalDowntime, 0)
       );
+
       setLoading(false);
     };
     fetchData();
