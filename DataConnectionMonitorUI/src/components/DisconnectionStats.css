@@ -1,0 +1,30 @@
+.stats {
+  display: grid;
+  grid-template-areas:
+    "total-disconnections total-downtime"
+    "longest-downtime longest-downtime";
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  color: var(--bs-body-color);
+}
+
+.stats .details {
+  border-radius: 4px;
+  border: 1px var(--bs-secondary-bg) solid;
+  padding: 0.5rem;
+}
+
+.stats .stats-text {
+  font-size: 0.8rem;
+}
+
+.stats .total-disconnections {
+}
+
+.stats .total-downtime {
+  overflow: hidden;
+}
+
+.stats .longest-downtime {
+  grid-column: 1 / 3;
+}

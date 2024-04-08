@@ -1,16 +1,17 @@
-type DisconnectionsProps = {
-  disconnections: { 
-    [date: string]: DisconnectionData[] 
-  };
-};
-
 type DisconnectionData = {
   start: Date;
   duration: number;
   downtime: string;
 };
 
-type DisconnectionProps = {
-  date: string;
-  disconnections: any;
+type GroupedDisconnection = {
+  date: Date;
+  disconnections: [
+    {
+      start: Date;
+      downtime: number;
+    },
+  ];
+  totalDowntime: number;
+  averageDowntime: number;
 };

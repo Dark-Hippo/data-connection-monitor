@@ -1,0 +1,34 @@
+.connection-status {
+  --size: 3rem;
+  display: flex;
+  align-items: center;
+  height: var(--size);
+  color: var(--bs-body-color);
+}
+
+.connection-status .connection-status-icon {
+  height: 100%;
+  width: var(--size);
+  background-color: var(--bs-secondary-bg);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  margin-right: 1rem;
+}
+
+.connection-status .connection-status-icon-right {
+  height: 100%;
+  width: var(--size);
+  color: var(--bs-body-color);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.connection-status .connection-status-text {
+  font-size: 0.8rem;
+}
