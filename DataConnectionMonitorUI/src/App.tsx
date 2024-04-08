@@ -31,7 +31,7 @@ function App() {
 
   useEffect(() => {
     const connection = new signalR.HubConnectionBuilder()
-      .withUrl("http://localhost:5000/disconnections-hub",
+      .withUrl("/disconnections-hub",
         {
           skipNegotiation: true,
           transport: signalR.HttpTransportType.WebSockets

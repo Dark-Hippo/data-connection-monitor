@@ -15,7 +15,14 @@ export const useDisconnectionsData = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("http://localhost:5000/api/disconnections");
+      const response = await fetch("/api/disconnections");
+
+      if (!response.ok) {
+        console.error("Failed to fetch disconnections data", response);
+        setLoading(false);
+        return;
+      }
+
       const data = await response.json();
       const dataWithDates = data.map((item: any) => ({
         ...item,
@@ -23,9 +30,6 @@ export const useDisconnectionsData = () => {
       }));
 
       setTotalDisconnections(dataWithDates.length);
-
-      console.log("data", data);
-      console.log("with dates", dataWithDates);
 
       setLongestDisconnection(
         [...dataWithDates].sort((a, b) => b.duration - a.duration)[0]
