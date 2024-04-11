@@ -1,4 +1,4 @@
-import { BarChartLine, BarChartLineFill, Gear, GearFill, House, HouseFill } from "react-bootstrap-icons";
+import { BarChartLine, BarChartLineFill, House, HouseFill } from "react-bootstrap-icons";
 import { NavLink, useLocation } from "react-router-dom";
 
 import "./Footer.css";
@@ -23,13 +23,6 @@ export const Footer = () => {
           }
           Stats
         </NavLink>
-        {/* <NavLink to='/settings'>
-          {location.pathname === '/settings' ?
-            <GearFill className="icon" /> :
-            <Gear className="icon" />
-          }
-          Settings
-        </NavLink> */}
       </nav>
     </footer>
   );
