@@ -1,4 +1,4 @@
-import { BarChartLine, BarChartLineFill, Gear, GearFill, House, HouseFill } from "react-bootstrap-icons";
+import { BarChartLine, BarChartLineFill, House, HouseFill } from "react-bootstrap-icons";
 import { NavLink, useLocation } from "react-router-dom";
 
 import "./Footer.css";
