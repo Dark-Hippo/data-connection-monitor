@@ -1,5 +1,5 @@
 # Use the official Microsoft .NET Core runtime base image
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 
 # Set the working directory in the image to '/app'
 WORKDIR /app
@@ -17,7 +17,7 @@ COPY . ./
 RUN dotnet publish -c Release -o out
 
 # Start a new stage with the runtime image
-FROM mcr.microsoft.com/dotnet/runtime:8.0
+FROM mcr.microsoft.com/dotnet/runtime:10.0
 
 # Set the working directory in the image to '/app'
 WORKDIR /app
