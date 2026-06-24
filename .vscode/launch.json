@@ -10,7 +10,7 @@
       "request": "launch",
       "preLaunchTask": "build",
       // If you have changed target frameworks, make sure to update the program path.
-      "program": "${workspaceFolder}/DataConnectionMonitor/bin/Debug/net8.0/DataConnectionMonitor.dll",
+      "program": "${workspaceFolder}/DataConnectionMonitor/bin/Debug/net10.0/DataConnectionMonitor.dll",
       "args": [],
       "cwd": "${workspaceFolder}/DataConnectionMonitor",
       // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
