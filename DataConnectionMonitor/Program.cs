@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 
-DotNetEnv.Env.NoClobber().Load();
+DotNetEnv.Env.TraversePath().NoClobber().Load();
 
 var builder = new ConfigurationBuilder()
   .SetBasePath(Directory.GetCurrentDirectory())
