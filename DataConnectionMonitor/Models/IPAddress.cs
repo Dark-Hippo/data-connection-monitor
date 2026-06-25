@@ -1,3 +1,5 @@
+namespace DataConnectionMonitor.Models;
+
 public class IPAddress
 {
   public required string Address { get; set; }

@@ -1,6 +1,8 @@
 ﻿using System.Net.NetworkInformation;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
+using DataConnectionMonitor.Services;
+using DataConnectionMonitor.Models;
 
 DotNetEnv.Env.TraversePath().NoClobber().Load();
 
@@ -72,6 +74,8 @@ ConnectionState connectionState = ConnectionState.Connected;
 
 var retryCount = 0;
 
+var fileWriteService = new FileWriteService(logger);
+
 while (true)
 {
   // Select a new random IP address
@@ -91,22 +95,22 @@ while (true)
       if (reply.Status == IPStatus.Success)
       {
         logger.LogInformation("Successfully pinged {IPAddress}", randomIPAddress.Address);
-        WriteSuccessToFile();
-        WriteCurrentStatusToFile(connectionState);
+        fileWriteService.WriteSuccessToFile(lastSuccessfulConnectionsFile);
+        fileWriteService.WriteCurrentStatusToFile(currentStatusFile, connectionState);
       }
       else
       {
         logger.LogWarning("Failed to ping {IPAddress}", randomIPAddress.Address);
         failureTime = DateTime.Now;
         connectionState = ConnectionState.Retrying;
-        WriteCurrentStatusToFile(connectionState);
+        fileWriteService.WriteCurrentStatusToFile(currentStatusFile, connectionState);
       }
       break;
     case ConnectionState.Retrying:
       if (reply.Status == IPStatus.Success)
       {
         connectionState = ConnectionState.Connected;
-        WriteCurrentStatusToFile(connectionState);
+        fileWriteService.WriteCurrentStatusToFile(currentStatusFile, connectionState);
         retryCount = 0;
       }
       else
@@ -116,7 +120,7 @@ while (true)
         if (retryCount >= maxRetries)
         {
           connectionState = ConnectionState.Disconnected;
-          WriteCurrentStatusToFile(connectionState);
+          fileWriteService.WriteCurrentStatusToFile(currentStatusFile, connectionState);
           retryCount = 0;
         }
       }
@@ -127,9 +131,9 @@ while (true)
         logger.LogInformation("Connection restored");
         var downtime = DateTime.Now.Subtract(failureTime);
         logger.LogInformation("Connection was down for a total of {downtime} seconds", downtime.TotalSeconds);
-        WriteFailureToFile(failureTime, downtime.TotalSeconds);
+        fileWriteService.WriteFailureToFile(disconnectionsFile, failureTime, downtime.TotalSeconds);
         connectionState = ConnectionState.Connected;
-        WriteCurrentStatusToFile(connectionState);
+        fileWriteService.WriteCurrentStatusToFile(currentStatusFile, connectionState);
       }
       else
       {
@@ -141,25 +145,4 @@ while (true)
   logger.LogInformation("Current connection state: {connectionState}", connectionState);
 
   Thread.Sleep(pingInterval);
-}
-
-void WriteFailureToFile(DateTime failureTime, double failureDuration)
-{
-  var failureFile = disconnectionsFile;
-  using var writer = new StreamWriter(failureFile, true);
-  writer.WriteLine($"{failureTime:yyyy-MM-dd HH:mm:ss},{failureDuration}");
-}
-
-void WriteSuccessToFile()
-{
-  var successFile = lastSuccessfulConnectionsFile;
-  using var writer = new StreamWriter(successFile, false);
-  writer.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}");
-}
-
-void WriteCurrentStatusToFile(ConnectionState connectionState)
-{
-  var statusFile = currentStatusFile;
-  using var writer = new StreamWriter(statusFile, false);
-  writer.WriteLine($"{connectionState}");
 }
