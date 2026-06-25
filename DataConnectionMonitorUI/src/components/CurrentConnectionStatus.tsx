@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { JSX, useEffect, useState } from 'react';
 import { Wifi, WifiOff, ExclamationOctagon } from 'react-bootstrap-icons';
 
 import './CurrentConnectionStatus.css';
