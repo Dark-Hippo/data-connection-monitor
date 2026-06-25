@@ -32,26 +32,40 @@ namespace DataConnectionMonitorAPI
     [HttpGet]
     public IEnumerable<Disconnection> Get(DateTime? fromDate, DateTime? toDate)
     {
-      using var reader = new StreamReader(_disconnectionsFile);
-      var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+      if(!System.IO.File.Exists(_disconnectionsFile))
       {
-        HasHeaderRecord = false,
-        Delimiter = ","
-      };
-      using var csv = new CsvReader(reader, config);
-      var disconnections = csv.GetRecords<Disconnection>().ToList();
-
-      // filter by date
-      if (fromDate.HasValue)
-      {
-        disconnections = disconnections.Where(d => d.Start >= fromDate).ToList();
-      }
-      if (toDate.HasValue)
-      {
-        disconnections = disconnections.Where(d => d.Start <= toDate).ToList();
+        _logger.LogInformation("Disconnections file does not exist: {DisconnectionsFile}. Assuming no disconnections.", _disconnectionsFile);
+        return new List<Disconnection>();
       }
 
-      return disconnections;
+      try {
+        using var reader = new StreamReader(_disconnectionsFile);
+      
+        var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+        {
+          HasHeaderRecord = false,
+          Delimiter = ","
+        };
+        using var csv = new CsvReader(reader, config);
+        var disconnections = csv.GetRecords<Disconnection>().ToList();
+
+        // filter by date
+        if (fromDate.HasValue)
+        {
+          disconnections = disconnections.Where(d => d.Start >= fromDate).ToList();
+        }
+        if (toDate.HasValue)
+        {
+          disconnections = disconnections.Where(d => d.Start <= toDate).ToList();
+        }
+
+        return disconnections;
+        }
+        catch (Exception ex)
+        {
+          _logger.LogError(ex, "Error reading disconnections file: {DisconnectionsFile}", _disconnectionsFile);
+          throw;
+        }
     }
   }
 }
