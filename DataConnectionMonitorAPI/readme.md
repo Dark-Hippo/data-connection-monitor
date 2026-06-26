@@ -1,6 +1,6 @@
 # Data Connection Monitor API
 
-This is the API for the Data Connection Monitor project. It is a .NET Core 8.0 Web API project that reads the status of the data connection from files and serves it to the UI via web sockets.
+This is the API for the Data Connection Monitor project. It is a .NET Core 10.0 Web API project that reads the status of the data connection from files and serves it to the UI via web sockets.
 
 ## Installation
 
