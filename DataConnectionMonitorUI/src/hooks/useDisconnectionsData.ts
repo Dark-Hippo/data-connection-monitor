@@ -23,6 +23,17 @@ export const useDisconnectionsData = () => {
         return;
       }
 
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        console.error(
+          "Expected JSON response but got",
+          contentType,
+          await response.text()
+        );
+        setLoading(false);
+        return;
+      }
+
       const data = await response.json();
       const dataWithDates = data.map((item: any) => ({
         ...item,
