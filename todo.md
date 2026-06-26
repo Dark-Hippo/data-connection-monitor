@@ -24,9 +24,9 @@
 
 ## DataConnectionMonitorUI
 
-- [ ] Add dockerfile with multi-stage build and proper build process (look at npm serve).
 - [ ] Add nginx to docker compose.
 - [ ] Change page title
 - [ ] Add last successful connection endpoint to UI.
-- [ ] Add connection status indicator
+- [ ] Add connection status indicator traffic light
 - [ ] Add authentication to communicate with API
+- [ ] Update readme doc
